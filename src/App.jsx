@@ -1,9 +1,18 @@
 import React from 'react'
+import { RouterProvider } from 'react-router-dom';
+import router from './routes/AppRouter';
 
-export const App = () => {
+import { Toaster } from 'react-hot-toast';
+import  AuthProvider  from './shared/context/AuthContext'
+
+
+export default function App() {
   return (
-    <div> <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1></div>
+    <AuthProvider>
+      <RouterProvider router={router} />
+      <Toaster />
+      
+    
+    </AuthProvider>
   )
 }

@@ -1,15 +1,15 @@
-import CareJourneySection from "../components/home/CareJourneySection";
-import FeaturedDoctorsSection from "../components/home/FeaturedDoctorsSection";
-import HeroSection from "../components/home/HeroSection";
-import HighlightsSection from "../components/home/HighlightsSection";
-import SpecialtiesSection from "../components/home/SpecialtiesSection";
+import CareJourneySection from "../components/CareJourneySection.jsx";
+import FeaturedDoctorsSection from "../components/FeaturedDoctorsSection";
+import HeroSection from "../components/HeroSection";
+import HighlightsSection from "../components/HighlightsSection";
+import SpecialtiesSection from "../components/SpecialtiesSection";
 import {
   careSteps,
   featuredDoctors,
   highlights,
   metrics,
   specialtyCards,
-} from "../components/home/homeContent";
+} from "../components/homeContent.js";
 
 const Home = () => {
   return (

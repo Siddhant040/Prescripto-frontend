@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import heroImage from "../../assets/hero.png";
+import heroImage from "../../../shared/assets/hero.png";
 
 const HeroSection = ({ metrics }) => {
   return (
@@ -34,7 +34,20 @@ const HeroSection = ({ metrics }) => {
           <div className="mt-8 flex flex-col gap-4 sm:flex-row">
             <Link
               to="/doctors"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800"
+             className="
+inline-flex items-center justify-center
+rounded-full
+bg-gradient-to-r from-emerald-600 to-teal-500
+px-6 py-3.5
+text-sm font-semibold text-white
+border border-emerald-500/30
+
+transition-all duration-300
+hover:from-emerald-700
+hover:to-teal-600
+
+hover:-translate-y-0.5
+"
             >
               Explore Doctors
               <ArrowRight className="h-4 w-4" />

@@ -6,7 +6,8 @@ import {
   createPaymentOrder,
   getMyPayments,
   verifyPayment
-} from "../../services/paymentServices";
+} from "../services/paymentServices";
+
 
 const PaymentTest = () => {
   const [appointmentId, setAppointmentId] = useState("");

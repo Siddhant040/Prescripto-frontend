@@ -1,13 +1,13 @@
-import DoctorHero from "../../components/doctor/DoctorHero";
-import DoctorOverviewCards from "../../components/doctor/DoctorOverviewCards";
-import DoctorSchedulePanel from "../../components/doctor/DoctorSchedulePanel";
-import DoctorSidebar from "../../components/doctor/DoctorSidebar";
+import DoctorHero from "../components/DoctorHero";
+import DoctorOverviewCards from "../components/DoctorOverviewCards";
+import DoctorSchedulePanel from "../components/DoctorSchedulePanel";
+import DoctorSidebar from "../components/DoctorSidebar";
 import {
   doctorOverviewCards,
   doctorQuickInfo,
   patientRequests,
   todaySchedule,
-} from "../../components/doctor/dashboardContent";
+} from "../components/dashboardContent";
 
 const DoctorDashboard = () => {
   return (

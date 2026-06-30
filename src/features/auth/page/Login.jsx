@@ -5,6 +5,7 @@ import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
 import { loginSchema } from "../schema/authSchema.js"
 import { useAuth } from "../hooks/checkAuth.js"
+import { useState } from "react"
 
 export default function Login() {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ export default function Login() {
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors, isSubmitting, touchedFields }
   } = useForm({
     resolver: zodResolver(loginSchema),
@@ -44,7 +46,13 @@ export default function Login() {
 
 
     } catch (error) {
-      toast.error(error.response?.data?.message || "Login failed")
+      const message = error.response?.data?.message || "Login failed";
+
+      toast.error(message);
+
+      if (message === "Please verify your email") {
+        setShowResend(true);
+      }
     }
   }
 
@@ -52,6 +60,26 @@ export default function Login() {
     console.log("Login form validation errors:", formErrors)
     toast.error("Please fix the highlighted fields before submitting")
   }
+
+  const [showResend, setShowResend] = useState(false);
+  const { handleResendVerifyEmail, isResending } = useAuth();
+  const handleResend = async () => {
+    try {
+      const email = getValues("email");
+      const response = await handleResendVerifyEmail(email);
+      toast.success(response.message || "Verification email resent.");
+
+    } catch (error) {
+      console.log(error);
+      toast.error(
+        error.response?.data?.message ||
+        "Unable to resend verification email."
+      );
+
+    }
+  }
+
+
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,_#f8fafc_0%,_#e2e8f0_45%,_#cbd5e1_100%)] px-4 py-10">
@@ -116,6 +144,7 @@ export default function Login() {
             </label>
             <button
               type="button"
+              onClick={() => navigate("/forgot-password")}
               className="font-medium text-slate-700 transition hover:text-slate-950"
             >
               Forgot password?
@@ -136,6 +165,34 @@ export default function Login() {
               "Sign In"
             )}
           </button>
+
+          {showResend && (
+            <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4">
+              <p className="text-sm font-medium text-amber-900">
+                Your email address hasn't been verified yet.
+              </p>
+
+              <p className="mt-1 text-sm text-amber-700">
+                Please verify your email before signing in.
+              </p>
+
+              <button
+                type="button"
+                onClick={handleResend}
+                disabled={isResending}
+                className="mt-4 inline-flex items-center rounded-xl border border-emerald-300 bg-white px-4 py-2 text-sm font-medium text-emerald-700 transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isResending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  "Resend verification email"
+                )}
+              </button>
+            </div>
+          )}
         </form>
       </div>
     </div>

@@ -23,3 +23,20 @@ export const  refreshAccessToken = async () => {
   const response = await api.post("/auth/refresh-token");
   return response.data;
 };
+
+export const resendVerifyEmail = async (email) => {
+  const response = await api.post("/auth/resend-email-verification", {email}  );
+  
+  return response.data;
+};
+export const forgotPassword = async (email) => {
+  const response = await api.post("/auth/forgot-password", {email}  );
+  
+  return response.data;
+};
+
+export const resetPassword = async (token, newPassword) => {
+  const response = await api.post(`/auth/reset-password/${token}`, { newPassword}  );
+  
+  return response.data;
+};

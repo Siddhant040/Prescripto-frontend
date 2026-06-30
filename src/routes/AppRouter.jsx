@@ -7,16 +7,17 @@ import PatientLayout from "../layouts/patientLayout";
 import ProtectedRoutes from "./protectedRoutes";
 import About from "../features/about/page/About"
 import Contact from "../features/contact/page/Contact"
-        import Home from "../features/home/page/Home";
-        import Login from "../features/auth/page/Login";
-        import Register from "../features/auth/page/Register";
-        import DoctorDashboard from "../features/doctors/page/Dashboard";
-
-        import Doctors from "../features/doctors/page/Doctors"
-        import DoctorDetails from "../features/doctors/page/DoctorDetails";
-        import Appointments from "../features/appointments/page/Appointments";
-        import Profile from "../features/patients/page/Dashboard";
-        import PaymentTest from "../features/payments//page/Dashboard"  
+import Home from "../features/home/page/Home";
+import Login from "../features/auth/page/Login";
+import Register from "../features/auth/page/Register";
+import DoctorDashboard from "../features/doctors/page/Dashboard";
+import ForgotPassword from "../features/auth/page/ForgotPassword";
+import ResetPassword from "../features/auth/page/Resetpassword";
+import Doctors from "../features/doctors/page/Doctors"
+import DoctorDetails from "../features/doctors/page/DoctorDetails";
+import Appointments from "../features/appointments/page/Appointments";
+import Profile from "../features/patients/page/Dashboard";
+import PaymentTest from "../features/payments//page/Dashboard"
 
 //         const router = createBrowserRouter([
 //   {
@@ -74,7 +75,7 @@ import Contact from "../features/contact/page/Contact"
 //           path: "appointments",
 //           element: <Appointments />,
 //         },
-        
+
 //         {
 //           path: "doctor-dashboard",
 //           element: <DoctorDashboard />,
@@ -86,7 +87,7 @@ import Contact from "../features/contact/page/Contact"
 // ]);
 
 // export default router;
- 
+
 
 const router = createBrowserRouter([
   // Public Website
@@ -101,6 +102,14 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <Login />,
+      },
+      {
+        path: "forgot-password",
+        element: <ForgotPassword />,
+      },
+      {
+        path: "reset-password/:token",
+        element: <ResetPassword />
       },
       {
         path: "register",

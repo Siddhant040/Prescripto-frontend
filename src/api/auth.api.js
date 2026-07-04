@@ -40,3 +40,32 @@ export const resetPassword = async (token, newPassword) => {
   
   return response.data;
 };
+
+export const updateUserProfileApi = async (userData) => {
+  const response = await api.patch(
+    "/auth/me",
+    userData
+  );
+
+  return response.data;
+};
+export const uploadAvatarApi = async (file) => {
+  const formData = new FormData();
+
+  formData.append("avatar", file);
+
+  const response = await api.post(
+    "/auth/upload-avatar",
+    formData
+  );
+
+  return response.data;
+};
+export const changePassword = async (userData) => {
+  const response = await api.post(
+    "/auth/change-password",
+    userData
+  );
+
+  return response.data;
+}

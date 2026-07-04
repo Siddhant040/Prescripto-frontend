@@ -17,7 +17,9 @@ import Doctors from "../features/doctors/page/Doctors"
 import DoctorDetails from "../features/doctors/page/DoctorDetails";
 import Appointments from "../features/appointments/page/Appointments";
 import Profile from "../features/patients/page/Dashboard";
+import PatientProfilePage from "../features/patients/page/PatientProfilePage";
 import PaymentTest from "../features/payments//page/Dashboard"
+import AccountSettingPage from "../features/patients/page/AccountSettingPage";
 
 //         const router = createBrowserRouter([
 //   {
@@ -132,26 +134,39 @@ const router = createBrowserRouter([
 
   // Protected Patient Area
   {
-    element: <ProtectedRoutes />,
-    children: [
-      {
-        path: "profile",
-        element: <PatientLayout />,
-        children: [
-          {
-            index: true,
-            element: <Profile />,
-          },
-          {
-            path: "appointments",
-            element: <Appointments />,
-          },
-        ],
-      },
-    ],
-  },
+  element: <ProtectedRoutes />,
+  children: [
+    {
+      path: "profile",
+      element: <PatientLayout />,
+      children: [
+        {
+          index: true,
+          element: <Profile />,
+        },
+        {
+          path: "appointments",
+          element: <Appointments />,
+        },
+        {
+          path: "me",
+          element: <PatientProfilePage />,
+        },
+        {
+          path: "settings",
+          element: <AccountSettingPage />,
+        },
+
+      ],
+    },
+    {
+      path: "doctor-dashboard",
+      element: <DoctorDashboard />,
+    },
+  ],
+}
+ 
 ]);
 
 export default router;
-
 

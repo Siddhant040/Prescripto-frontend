@@ -1,35 +1,44 @@
-import AppointmentsPanel from "../components/AppointmentsPanel";
-import DashboardHero from "../components/DashboardHero";
-import OverviewCards from "../components/OverviewCards";
-import PrescriptionsPanel from "../components/PrescriptionsPanel";
-import ProfileSidebar from "../components/ProfileSidebar";
-
+import DashboardHeroCard from "../components/DashboardHeroCard";
+import DashboardQuickActions from "../components/DashboardQuickActions";
+import DashboardSidebar from "../components/DashboardSidebar";
+import DashboardStatCards from "../components/DashboardStatCards";
+import RecommendedDoctors from "../components/RecommendedDoctors";
+import RecentAppointmentsTable from "../components/RecentAppointmentsTable";
+import UpcomingAppointmentCard from "../components/UpcomingAppointmentCard";
 import {
-  healthSummary,
-  overviewCards,
-  prescriptions,
+  heroContent,
+  patientProfile,
+  quickActions,
   recentActivity,
-  upcomingAppointments,
-} from "../components/dashboardContent";
+  recentAppointments,
+  recommendedDoctors,
+  sidebarNote,
+  stats,
+  upcomingAppointment,
+} from "../components/patientDashboardData";
 
 const Profile = () => {
-
   return (
-    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-16">
-      <div className="space-y-8">
-        <DashboardHero />
-        <OverviewCards cards={overviewCards} />
-
-        <div className="grid gap-8 xl:grid-cols-[1.35fr_0.95fr]">
-          <div className="space-y-8">
-            <AppointmentsPanel appointments={upcomingAppointments} />
-            <PrescriptionsPanel prescriptions={prescriptions} />
+    <div className="w-full px-1 py-1">
+      <div className="space-y-6">
+        <div className="grid gap-5 2xl:grid-cols-[minmax(0,1.65fr)_340px]">
+          <div className="min-w-0 space-y-6">
+            <DashboardHeroCard content={heroContent} />
+            <DashboardQuickActions actions={quickActions} />
+            <DashboardStatCards stats={stats} />
+            <UpcomingAppointmentCard appointment={upcomingAppointment} />
+            <RecentAppointmentsTable appointments={recentAppointments} />
+            <RecommendedDoctors doctors={recommendedDoctors} />
           </div>
 
-          <ProfileSidebar
-            healthSummary={healthSummary}
-            recentActivity={recentActivity}
-          />
+          <div className="min-w-0">
+            <DashboardSidebar
+              profile={patientProfile}
+              upcomingAppointment={upcomingAppointment}
+              activity={recentActivity}
+              note={sidebarNote}
+            />
+          </div>
         </div>
       </div>
     </div>

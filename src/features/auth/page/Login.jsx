@@ -1,50 +1,58 @@
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Loader2 } from "lucide-react"
-import toast from "react-hot-toast"
-import { useNavigate } from "react-router-dom"
-import { loginSchema } from "../schema/authSchema.js"
-import { useAuth } from "../hooks/checkAuth.js"
-import { useState } from "react"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/checkAuth.js";
+import { loginSchema } from "../schema/authSchema.js";
+
+const getLoginUser = (response) => response?.data?.user || response?.data || null;
+
+const getRoleRedirectPath = (role) => {
+  if (role === "patient") return "/profile";
+  if (role === "doctor") return "/doctor-dashboard";
+  if (role === "admin") return "/admin-dashboard";
+  return "/";
+};
 
 export default function Login() {
   const navigate = useNavigate();
-  const { handleLogin } = useAuth();
+  const {
+    handleLogin,
+    handleResendVerifyEmail,
+    isResending,
+    logging,
+  } = useAuth();
+  const [showResend, setShowResend] = useState(false);
+
   const {
     register,
     handleSubmit,
     getValues,
-    formState: { errors, isSubmitting, touchedFields }
+    formState: { errors, isSubmitting, touchedFields },
   } = useForm({
     resolver: zodResolver(loginSchema),
     mode: "onChange",
     defaultValues: {
       email: "",
       password: "",
-      rememberMe: false
-    }
-  })
+      rememberMe: false,
+    },
+  });
 
   const onSubmit = async (data) => {
     try {
+      setShowResend(false);
+
       const response = await handleLogin({
         email: data.email,
-        password: data.password
-      })
+        password: data.password,
+      });
+      const loggedInUser = getLoginUser(response);
 
-      toast.success(response.message || "Login successful")
-      const role = response.data.user.role;
-
-      if (role === "patient") {
-        navigate("/profile");
-      } else if (role === "doctor") {
-        navigate("/doctor-dashboard");
-      } else if (role === "admin") {
-        navigate("/admin-dashboard");
-      }
-
-
-
+      toast.success(response.message || "Login successful");
+      navigate(getRoleRedirectPath(loggedInUser?.role), { replace: true });
     } catch (error) {
       const message = error.response?.data?.message || "Login failed";
 
@@ -54,32 +62,33 @@ export default function Login() {
         setShowResend(true);
       }
     }
-  }
+  };
 
   const onInvalid = (formErrors) => {
-    console.log("Login form validation errors:", formErrors)
-    toast.error("Please fix the highlighted fields before submitting")
-  }
+    console.log("Login form validation errors:", formErrors);
+    toast.error("Please fix the highlighted fields before submitting");
+  };
 
-  const [showResend, setShowResend] = useState(false);
-  const { handleResendVerifyEmail, isResending } = useAuth();
   const handleResend = async () => {
+    const email = getValues("email");
+
+    if (!email) {
+      toast.error("Enter your email address first.");
+      return;
+    }
+
     try {
-      const email = getValues("email");
       const response = await handleResendVerifyEmail(email);
       toast.success(response.message || "Verification email resent.");
-
     } catch (error) {
       console.log(error);
       toast.error(
-        error.response?.data?.message ||
-        "Unable to resend verification email."
+        error.response?.data?.message || "Unable to resend verification email."
       );
-
     }
-  }
+  };
 
-
+  const isLoggingIn = isSubmitting || logging;
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,_#f8fafc_0%,_#e2e8f0_45%,_#cbd5e1_100%)] px-4 py-10">
@@ -153,10 +162,10 @@ export default function Login() {
 
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isLoggingIn}
             className="flex w-full items-center justify-center rounded-2xl bg-slate-950 px-4 py-3.5 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(15,23,42,0.24)] transition duration-200 hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-70"
           >
-            {isSubmitting ? (
+            {isLoggingIn ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Signing in...
@@ -169,7 +178,7 @@ export default function Login() {
           {showResend && (
             <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4">
               <p className="text-sm font-medium text-amber-900">
-                Your email address hasn't been verified yet.
+                Your email address has not been verified yet.
               </p>
 
               <p className="mt-1 text-sm text-amber-700">
@@ -196,5 +205,5 @@ export default function Login() {
         </form>
       </div>
     </div>
-  )
+  );
 }

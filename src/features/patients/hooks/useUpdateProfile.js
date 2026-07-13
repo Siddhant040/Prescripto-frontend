@@ -1,5 +1,5 @@
 import { useState,useContext } from "react";
-import { updateUserProfileApi, uploadAvatarApi,changePassword } from "../../../api/auth.api";
+import { updateUserProfileApi, uploadAvatarApi, changePassword } from "../../../api/auth.api";
 import { AuthContext } from "../../../shared/context/AuthContext";
 
 

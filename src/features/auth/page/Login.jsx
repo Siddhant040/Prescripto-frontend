@@ -9,10 +9,10 @@ import { loginSchema } from "../schema/authSchema.js";
 
 const getLoginUser = (response) => response?.data?.user || response?.data || null;
 
-const getRoleRedirectPath = (role) => {
-  if (role === "patient") return "/profile";
-  if (role === "doctor") return "/doctor-dashboard";
-  if (role === "admin") return "/admin-dashboard";
+const getRoleRedirectPath = (activeRole) => {
+  if (activeRole === "patient") return "/profile";
+  if (activeRole === "doctor") return "/doctor-dashboard";
+  if (activeRole === "admin") return "/admin-dashboard";
   return "/";
 };
 
@@ -52,7 +52,7 @@ export default function Login() {
       const loggedInUser = getLoginUser(response);
 
       toast.success(response.message || "Login successful");
-      navigate(getRoleRedirectPath(loggedInUser?.role), { replace: true });
+      navigate(getRoleRedirectPath(loggedInUser?.activeRole), { replace: true });
     } catch (error) {
       const message = error.response?.data?.message || "Login failed";
 

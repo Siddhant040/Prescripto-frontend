@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { changePasswordSchema } from "../schema/UpdateProfileSchema";
+import { changePasswordSchema } from "../../auth/schema/authSchema";
 
 
 const formatDate = (value) => {
@@ -129,8 +129,8 @@ const AccountSettingPage = () => {
         },
     })
 
-    const { handleChangePassword, updatingPassword } = useUpdateProfile()
-    const { user } = useAuth();
+    
+    const { user, handleChangePassword, updatingPassword } = useAuth();
 
     const onSubmit = async (data) => {
         try {

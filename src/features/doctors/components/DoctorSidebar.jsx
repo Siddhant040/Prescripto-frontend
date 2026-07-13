@@ -1,69 +1,147 @@
-import { BadgeCheck, ClipboardList, UserCog } from "lucide-react";
+import {
+  BadgeCheck,
+  CalendarDays,
+  ClipboardList,
+  Clock3,
+  FileText,
+  Settings,
+  Star,
+  Users,
+  LayoutGrid,
+  Stethoscope,
+  User,
+  ChevronRight,
+  LogOut,
+} from "lucide-react";
+import { Link, useNavigate, NavLink } from "react-router-dom";
+import SidebarSupportCard from "../../../components/layouts/SidebarSupportCard";
+import SwitchProfileCard from "../../../components/layouts/SwitchCard"
+import { useState, useRef } from "react"
+import { useAuth } from "../../../features/auth/hooks/checkAuth";
+import { toast } from "react-hot-toast";
 
-const DoctorSidebar = ({ quickInfo, requests }) => {
+const navigationItems = [
+  { label: "Dashboard", to: "/doctor-dashboard",end: true ,icon: LayoutGrid },
+  { label: "Appointments", to: "/doctor-dashboard/appointments", icon: Clock3 },
+  { label: "Patients", to: "/doctor-dashboard/patients", icon: Users },
+
+  { label: "Reviews", to: "/doctor-dashboard/reviews", icon: Star },
+  { label: "Settings", to: "/doctor-dashboard/doctor-settings", icon: Settings },
+];
+const getInitials = (name) => {
+  if (!name) return "AM";
+
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() || "")
+    .join("");
+};
+
+const DoctorSidebar = ({
+  doctorName = "Dr. Sharma",
+  specialization = "Cardiology",
+  status = "Available",
+  quickInfo = [],
+  requests = [],
+}) => {
+  const navigate = useNavigate();
+ 
+  const { user, handleChangeActiveRole, isChangingActiveRole } = useAuth();
+  const changeActiveRole = async () => {
+    try {
+      await handleChangeActiveRole("patient");
+      toast.success("profile changed successfully");
+       navigate( "/profile");
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
+
+  const profileName = user?.name;
+  const profileEmail = user?.email;
+  const avatarFallback = getInitials(profileName);
   return (
-    <div className="space-y-6">
-      <section className="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-[0_18px_48px_rgba(15,23,42,0.08)]">
-        <div className="flex items-center gap-3">
-          <BadgeCheck className="h-5 w-5 text-emerald-700" />
-          <h2 className="text-xl font-semibold tracking-tight text-slate-950">
-            Doctor Status
-          </h2>
+    <aside className="sticky top-3 flex max-h-[calc(100vh-1.5rem)] min-h-[calc(100vh-1.5rem)] flex-col rounded-[24px] border border-slate-200 bg-white px-4 py-5 shadow-[0_12px_30px_rgba(15,23,42,0.05)]">
+      <Link to="/doctor" className="flex items-center gap-3 px-2">
+        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,_#0f766e,_#34d399)] text-white shadow-[0_10px_22px_rgba(15,118,110,0.2)]">
+          <Stethoscope className="h-5 w-5" />
         </div>
 
-        <div className="mt-6 grid gap-4">
-          {quickInfo.map((item) => (
-            <div
+        <div>
+          <p className="text-base font-semibold tracking-tight text-slate-950">
+            Prescripto
+          </p>
+
+          <p className="text-[11px] uppercase tracking-[0.3em] text-slate-400">
+            Doctor Portal
+          </p>
+        </div>
+      </Link>
+      <nav className="mt-7 shrink-0 space-y-2">
+        {navigationItems.map((item) => {
+          const Icon = item.icon;
+
+          if (!item.to) {
+            return (
+              <button
+                key={item.label}
+                type="button"
+                className="group flex h-12 w-full items-center gap-3 rounded-2xl px-3 text-left text-[15px] font-medium text-slate-600 transition hover:bg-emerald-50 hover:text-slate-950"
+              >
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-500 transition group-hover:bg-white group-hover:text-emerald-700">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <span>{item.label}</span>
+              </button>
+            );
+          }
+
+          return (
+            <NavLink
               key={item.label}
-              className="rounded-[1.25rem] border border-slate-200 bg-slate-50/80 px-4 py-3"
+              to={item.to}
+              end={item.end}
+              className={({ isActive }) =>
+                `group flex h-12 items-center gap-3 rounded-2xl px-3 text-[15px] font-medium transition ${isActive
+                  ? "bg-[linear-gradient(135deg,_#0f766e,_#14b8a6)] text-white shadow-[0_12px_24px_rgba(15,118,110,0.2)]"
+                  : "text-slate-600 hover:bg-emerald-50 hover:text-slate-950"
+                }`
+              }
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
-                {item.label}
-              </p>
-              <p className="mt-2 text-sm font-medium text-slate-950">
-                {item.value}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
+              {({ isActive }) => (
+                <>
+                  <span
+                    className={`flex h-9 w-9 items-center justify-center rounded-xl transition ${isActive
+                      ? "bg-white/15 text-white"
+                      : "bg-slate-100 text-slate-500 group-hover:bg-white group-hover:text-emerald-700"
+                      }`}
+                  >
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <span>{item.label}</span>
+                </>
+              )}
+            </NavLink>
+          );
+        })}
+      </nav>
+      <div className="mt-auto shrink-0 space-y-4">
+        <SidebarSupportCard />
+{user?.roles?.includes("patient") && (
+       <SwitchProfileCard
+    switchTo="Patient"
+    onSwitch={changeActiveRole}
+     isLoading={isChangingActiveRole}
+/>
+        )}
+      </div>
 
-      <section className="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-[0_18px_48px_rgba(15,23,42,0.08)]">
-        <div className="flex items-center gap-3">
-          <ClipboardList className="h-5 w-5 text-emerald-700" />
-          <h2 className="text-xl font-semibold tracking-tight text-slate-950">
-            Priority Queue
-          </h2>
-        </div>
 
-        <div className="mt-6 space-y-4">
-          {requests.map((item) => (
-            <article
-              key={item.name}
-              className="rounded-[1.5rem] border border-slate-200 bg-slate-50/80 p-5"
-            >
-              <p className="text-sm font-semibold text-slate-950">{item.name}</p>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
-                {item.detail}
-              </p>
-            </article>
-          ))}
-        </div>
-      </section>
 
-      <section className="rounded-[2rem] border border-emerald-100 bg-emerald-50/70 p-6 shadow-[0_18px_48px_rgba(15,23,42,0.06)]">
-        <div className="flex items-center gap-3">
-          <UserCog className="h-5 w-5 text-emerald-800" />
-          <h2 className="text-lg font-semibold tracking-tight text-slate-950">
-            Workspace Ready
-          </h2>
-        </div>
-        <p className="mt-3 text-sm leading-6 text-slate-600">
-          This doctor dashboard is UI-only for now, so we can connect live
-          patients, schedules, and approvals later.
-        </p>
-      </section>
-    </div>
+
+    </aside>
   );
 };
 

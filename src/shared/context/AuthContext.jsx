@@ -7,25 +7,29 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
-  
-    const checkAuth = async () => {
-      try {
-        const response = await getCurrentUser();
-        setUser(response.data?.user || response.data || null);
-      } catch (error) {
-        console.log("Auth check failed:", error.response?.data || error.message);
-        setUser(null);
-      } finally {
-        setIsCheckingAuth(false);
+
+  const checkAuth = async () => {
+    try {
+      const response = await getCurrentUser();
+      setUser(response.data?.user || response.data || null);
+    } catch (error) {
+      // Only log unexpected errors
+      if (error.response?.status !== 401) {
+        console.error(error);
       }
-    };
-    useEffect(() => {
+
+      setUser(null);
+    } finally {
+      setIsCheckingAuth(false);
+    }
+  };
+  useEffect(() => {
 
     checkAuth();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, isCheckingAuth,checkAuth }}>
+    <AuthContext.Provider value={{ user, setUser, isCheckingAuth, checkAuth }}>
       {children}
     </AuthContext.Provider>
   );

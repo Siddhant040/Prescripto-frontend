@@ -14,12 +14,17 @@ import DoctorDashboard from "../features/doctors/page/Dashboard";
 import ForgotPassword from "../features/auth/page/ForgotPassword";
 import ResetPassword from "../features/auth/page/Resetpassword";
 import Doctors from "../features/doctors/page/Doctors"
-import DoctorDetails from "../features/doctors/page/DoctorDetails";
+import PublicDoctorDetails from "../features/doctors/page/PublicDoctorDetails";
 import Appointments from "../features/appointments/page/Appointments";
 import Profile from "../features/patients/page/Dashboard";
 import PatientProfilePage from "../features/patients/page/PatientProfilePage";
 import PaymentTest from "../features/payments//page/Dashboard"
 import AccountSettingPage from "../features/patients/page/AccountSettingPage";
+import PatientDoctorDetails from "../features/doctors/page/PatientDoctorDetails";
+import DoctorLayout from "../layouts/doctorLayout";
+import DoctorProfile from "../features/doctors/page/doctorProfile";
+import DoctorSettingPage from "../features/doctors/page/DoctorSettingPage";
+import CreateDoctorProfile from "../features/doctors/page/CreateDoctorProfile";
 
 //         const router = createBrowserRouter([
 //   {
@@ -122,6 +127,10 @@ const router = createBrowserRouter([
         element: <Doctors />,
       },
       {
+        path: "doctors/:id",
+        element: <PublicDoctorDetails />,
+      },
+      {
         path: "about",
         element: <About />,
       },
@@ -133,7 +142,7 @@ const router = createBrowserRouter([
   },
 
   // Protected Patient Area
-  {
+ {
   element: <ProtectedRoutes />,
   children: [
     {
@@ -156,17 +165,52 @@ const router = createBrowserRouter([
           path: "settings",
           element: <AccountSettingPage />,
         },
+        {
+          path: "create-doctor-profile",
+          element: <CreateDoctorProfile />,
+        },
 
+
+        // LIST PAGE
+        {
+          path: "doctors",
+          element: (
+            <Doctors
+              showSearch={false}
+              insidePatientDashboard
+            />
+          ),
+        },
+
+        // DETAILS PAGE
+        {
+          path: "doctors/:id",
+          element: <PatientDoctorDetails />,
+        },
       ],
     },
+
     {
       path: "doctor-dashboard",
-      element: <DoctorDashboard />,
+      element: <DoctorLayout />,
+      children: [
+        {
+          index: true,
+          element: <DoctorDashboard />,
+        },
+        {
+          path: "doctor-profile",
+          element: <DoctorProfile />,
+        },
+        {
+          path: "doctor-settings",
+          element: <DoctorSettingPage />,
+        },
+      ],
     },
   ],
 }
- 
 ]);
 
-export default router;
 
+export default router;

@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../auth/hooks/checkAuth";
-import SidebarSupportCard from "./SidebarSupportCard";
+import SidebarSupportCard from "../../../components/layouts/SidebarSupportCard";
+import SwitchProfileCard from "../../../components/layouts/SwitchCard"
+import BecomeDoctorCard from "../../doctors/components/BecomeDoctorCard";
 import {
   Bell,
   CalendarRange,
@@ -17,7 +19,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 const navigationItems = [
   { label: "Dashboard", to: "/profile", end: true, icon: LayoutGrid },
   { label: "Appointments", to: "/profile/appointments", icon: CalendarRange },
-  { label: "Doctors", to: "/doctors", icon: Stethoscope },
+  { label: "Doctors", to: "/profile/doctors", icon: Stethoscope },
 
 ];
 
@@ -34,41 +36,28 @@ const getInitials = (name) => {
 
 
 const PatientNavSidebar = () => {
-  const { user, handleLogout, isLoggingOut } = useAuth();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navigate = useNavigate();
-  const menuRef = useRef(null);
+  const { user, handleChangeActiveRole, isChangingActiveRole  } = useAuth();
   
-  const onSubmit = async () => {
+  const navigate = useNavigate();
+ 
+  
+  const changeActiveRole = async () => {
     try {
-      await handleLogout();
-      toast.success("Logged out successfully");
+      await handleChangeActiveRole("doctor");
+      toast.success("profile changed successfully");
+       navigate( "/doctor-dashboard" );
     } catch (error) {
-      toast.error("Logout failed");
-      console.log(error);
+      toast.error(error.response.data.message);
     }
-  };
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(event.target)
-      ) {
-        setIsMenuOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  }
+ 
 
   const profileName = user?.name ?? "Guest";
 
 const profileEmail = user?.email ?? "";
   const avatarFallback = getInitials(profileName);
+  const isOnlyPatient =
+    user?.roles?.length === 1 && user.roles.includes("patient");
 
   return (
     <aside className="sticky top-3 flex max-h-[calc(100vh-1.5rem)] min-h-[calc(100vh-1.5rem)] flex-col rounded-[24px] border border-slate-200 bg-white px-4 py-5 shadow-[0_12px_30px_rgba(15,23,42,0.05)]">
@@ -137,67 +126,15 @@ const profileEmail = user?.email ?? "";
 
       <div className="mt-auto shrink-0 space-y-4">
         <SidebarSupportCard />
-
-        <div ref={menuRef} className="relative">
-          <button
-            type="button"
-            onClick={() => setIsMenuOpen((open) => !open)}
-            className="flex items-center gap-3 rounded-full border border-emerald-100 bg-white px-2.5 py-2 transition hover:border-emerald-200"
-          >
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,_#0f766e,_#34d399)] text-sm font-semibold text-white">
-              {avatarFallback}
-            </div>
-            <div className="hidden pr-1 text-left sm:block">
-              <p className="text-sm font-semibold text-slate-950">{profileName}</p>
-              <p className="text-xs text-slate-500">{profileEmail}</p>
-            </div>
-             <ChevronDown
-                  className={`h-4 w-4 text-slate-400 transition-transform duration-200 ${isMenuOpen ? "rotate-180" : ""
-                    }`}
-                />
-          </button>
-
-          {isMenuOpen ? (
-            <div className="absolute right-0 bottom-[calc(100%+0.6rem)] z-40 w-52 rounded-[20px] border border-emerald-100 bg-white p-2 shadow-[0_20px_45px_rgba(15,23,42,0.12)]">
-              <button
-                type="button"
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  navigate("/profile/me");
-                }}
-                className="flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-left text-sm font-medium text-slate-700 transition hover:bg-emerald-50 hover:text-emerald-700"
-              >
-                <User className="h-4 w-4" />
-                My Profile
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  navigate("/profile/settings");
-                }}
-                className="flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-left text-sm font-medium text-slate-700 transition hover:bg-emerald-50 hover:text-emerald-700"
-              >
-                <Settings className="h-4 w-4" />
-                Account Settings
-              </button>
-
-              <div className="my-2 h-px bg-slate-100" />
-              <button
-                type="button"
-                onClick={async () => {
-                  setIsMenuOpen(false);
-                  await onSubmit();
-                }}
-                disabled={isLoggingOut}
-                className="flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-left text-sm font-medium text-rose-600 transition hover:bg-rose-50 disabled:opacity-60"
-              >
-                <LogOut className="h-4 w-4" />
-                {isLoggingOut ? "Logging out..." : "Logout"}
-              </button>
-            </div>
-          ) : null}
-        </div>
+        {isOnlyPatient && <BecomeDoctorCard 
+        onClick={() => navigate("/profile/create-doctor-profile")}/>}
+{user?.roles?.includes("doctor") && (
+       <SwitchProfileCard
+           switchTo="Doctor"
+           onSwitch={changeActiveRole}
+            isLoading={isChangingActiveRole}
+       />
+     )}
       </div>
     </aside>
   );

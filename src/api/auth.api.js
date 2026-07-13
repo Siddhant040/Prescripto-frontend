@@ -69,3 +69,11 @@ export const changePassword = async (userData) => {
 
   return response.data;
 }
+
+export const changeActiveRole = async (activeRole) => {
+  const response = await api.patch(
+    "/auth/active-role",
+    {activeRole}
+  );  
+  return response.data;
+}

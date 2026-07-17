@@ -188,9 +188,12 @@ function DoctorDetailsContent({
 
         <button
           type="button"
+        
           className="inline-flex h-12 shrink-0 items-center justify-center rounded-full bg-emerald-600 px-7 text-sm font-semibold text-white shadow-[0_16px_30px_rgba(5,150,105,0.22)] transition hover:bg-emerald-700 hover:shadow-xl"
         >
+          <Link to={`booking`}>
           Book Appointment
+          </Link>
         </button>
       </section>
 

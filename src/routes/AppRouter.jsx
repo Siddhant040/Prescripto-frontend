@@ -25,6 +25,10 @@ import DoctorLayout from "../layouts/doctorLayout";
 import DoctorProfile from "../features/doctors/page/doctorProfile";
 import DoctorSettingPage from "../features/doctors/page/DoctorSettingPage";
 import CreateDoctorProfile from "../features/doctors/page/CreateDoctorProfile";
+import AppointmentDetailPage from "../features/appointments/page/AppointmentDetailPage";
+import BookingPage from "../features/appointments/page/BookingPage";
+import DoctorAppointments from "../features/appointments/page/DoctorAppointments";
+import DoctorAppointmentDetailPage from "../features/appointments/page/DoctorAppointmentDetailPage";
 
 //         const router = createBrowserRouter([
 //   {
@@ -142,74 +146,94 @@ const router = createBrowserRouter([
   },
 
   // Protected Patient Area
- {
-  element: <ProtectedRoutes />,
-  children: [
-    {
-      path: "profile",
-      element: <PatientLayout />,
-      children: [
-        {
-          index: true,
-          element: <Profile />,
-        },
-        {
-          path: "appointments",
-          element: <Appointments />,
-        },
-        {
-          path: "me",
-          element: <PatientProfilePage />,
-        },
-        {
-          path: "settings",
-          element: <AccountSettingPage />,
-        },
-        {
-          path: "create-doctor-profile",
-          element: <CreateDoctorProfile />,
-        },
+  {
+    element: <ProtectedRoutes />,
+    children: [
+      {
+        path: "profile",
+        element: <PatientLayout />,
+        children: [
+          {
+            index: true,
+            element: <Profile />,
+          },
+          {
+            path: "appointments",
+            element: <Appointments />,
+
+          },
+          {
+            path: "appointments/:id",
+            element: <AppointmentDetailPage />,
+          },
+          {
+            path: "me",
+            element: <PatientProfilePage />,
+          },
+          {
+            path: "settings",
+            element: <AccountSettingPage />,
+          },
+          {
+            path: "create-doctor-profile",
+            element: <CreateDoctorProfile />,
+          },
 
 
-        // LIST PAGE
-        {
-          path: "doctors",
-          element: (
-            <Doctors
-              showSearch={false}
-              insidePatientDashboard
-            />
-          ),
-        },
+          // LIST PAGE
+          {
+            path: "doctors",
+            element: (
+              <Doctors
+                showSearch={false}
+                insidePatientDashboard
+              />
+            ),
+          },
 
-        // DETAILS PAGE
-        {
-          path: "doctors/:id",
-          element: <PatientDoctorDetails />,
-        },
-      ],
-    },
+          // DETAILS PAGE
+          {
+            path: "doctors/:id",
+            element: <PatientDoctorDetails />,
+          },
 
-    {
-      path: "doctor-dashboard",
-      element: <DoctorLayout />,
-      children: [
-        {
-          index: true,
-          element: <DoctorDashboard />,
-        },
-        {
-          path: "doctor-profile",
-          element: <DoctorProfile />,
-        },
-        {
-          path: "doctor-settings",
-          element: <DoctorSettingPage />,
-        },
-      ],
-    },
-  ],
-}
+          {
+            path: "doctors/:id/booking",
+            element: <BookingPage />,
+          },
+
+        ],
+      },
+
+      {
+        path: "doctor-dashboard",
+        element: <DoctorLayout />,
+        children: [
+          {
+            index: true,
+            element: <DoctorDashboard />,
+          },
+          {
+            path: "doctor-profile",
+            element: <DoctorProfile />,
+          },
+          {
+            path: "doctor-settings",
+            element: <DoctorSettingPage />,
+          },
+          {
+            path: "appointments",
+            element: <DoctorAppointments />,
+          },
+          {
+            path: "appointments/:id",
+            element: <DoctorAppointmentDetailPage />,
+          },
+
+        ],
+      },
+    ],
+  }
 ]);
 
 

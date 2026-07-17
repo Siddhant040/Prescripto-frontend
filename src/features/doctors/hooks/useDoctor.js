@@ -44,8 +44,8 @@ const handleGetAllDoctors = async () => {
 }
 
 const handleGetDoctorById = async (id) => {
+  setSelectedDoctorLoading(true);
     try {
-        setSelectedDoctorLoading(true);
         const response = await getDoctorbyId(id);
         
         const doctor = response.data;

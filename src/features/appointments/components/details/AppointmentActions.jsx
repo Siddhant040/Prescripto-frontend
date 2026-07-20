@@ -1,13 +1,40 @@
 import { Loader2 } from "lucide-react";
+
 const AppointmentActions = ({
   onReschedule,
   onCancel,
   appointment,
   isCancelling,
   isRescheduling = false,
+  onPayNow,
+  isPaid  ,
+  isCreating = false,
 }) => {
+
+  console.log({
+  status: appointment.status,
+  paymentStatus: appointment.paymentStatus,
+  isPaid,
+});
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+      {appointment.status === "confirmed" && !isPaid && (
+  <button
+    type="button"
+    onClick={onPayNow}
+    disabled={isCreating}
+    className="inline-flex h-11 items-center justify-center rounded-full bg-blue-600 px-6 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+  >
+    {isCreating ? "Processing..." : "Pay Now"}
+  </button>
+)}
+{appointment.status === "confirmed" && isPaid && (
+  <span className="inline-flex h-11 items-center justify-center rounded-full bg-green-100 px-6 text-sm font-semibold text-green-700">
+    Payment Completed
+  </span>
+)}
+
+
       <button
         type="button"
         disabled={isCancelling}

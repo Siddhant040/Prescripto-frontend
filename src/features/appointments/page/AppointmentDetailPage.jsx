@@ -1,5 +1,5 @@
 import { ArrowLeft } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import AppointmentActions from "../components/details/AppointmentActions";
 import AppointmentDetailHero from "../components/details/AppointmentDetailHero";
 import AppointmentTimeline from "../components/details/AppointmentTimeline";
@@ -12,29 +12,49 @@ import {
 } from "../components/details/appointmentDetailFallback";
 import { useAppointments } from "../hooks/useAppointment";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { handlePaynow } from "../../payments/services/paymentService";
+import { usePayment } from "../../payments/hooks/usePayment";
+import { useAuth } from "../../auth/hooks/checkAuth";
+import toast from "react-hot-toast";
 
 function AppointmentDetailPage() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { handleGetAppointmentbyId,selectedAppointment,appointmentLoading,handleCancelAppointment,canceling, res} = useAppointments();
+  const { user } = useAuth();
+  const { handleGetAppointmentbyId, selectedAppointment, appointmentLoading, handleCancelAppointment, canceling } = useAppointments();
+  const { isCreating, handleCreateOrder, handleVerifyPayment, handleGetPaymentById, paymentloading, payments } = usePayment();
+
   useEffect(() => {
     handleGetAppointmentbyId(id);
+    // handleGetPaymentById(id);
   }, [id]);
+
   if (appointmentLoading) {
-    <div>Loading</div>;
+    return <div>Loading</div>;
   }
-  console.log("selectedAppointment",selectedAppointment);
+
+  console.log("selectedAppointment", selectedAppointment);
   const appointment = selectedAppointment || appointmentDetailFallback;
   const cancelAppointment = async (id) => {
-    try{
+    try {
       await handleCancelAppointment(id);
       handleGetAppointmentbyId(id);
-    }catch(error){
+    } catch (error) {
       console.log(error);
       toast.error("Unable to cancel appointments");
     }
-  }
+  };
+
+  const handlePayNow = async () => {
+    await handlePaynow({
+      appointment,
+      user,
+      handleCreateOrder,
+      handleVerifyPayment,
+      handleGetAppointmentbyId,
+    });
+  };
+
   const handleReschedule = () => {
   navigate(`/profile/doctors/${appointment.doctor.id}/booking`, {
     state: {
@@ -82,12 +102,14 @@ function AppointmentDetailPage() {
         <AppointmentTimeline status={appointment.status} />
 
         <AppointmentActions
-        appointment={appointment}
-        onCancel={cancelAppointment}
-        isCancelling={canceling} 
-        onReschedule={handleReschedule}
-        isRescheduling={false}
-        
+          appointment={appointment}
+          onCancel={cancelAppointment}
+          isCancelling={canceling}
+          onReschedule={handleReschedule}
+          isRescheduling={false}
+          onPayNow={handlePayNow}
+          isPaid={appointment.paymentStatus === "paid"}
+          isCreating={isCreating}
         />
       </div>
     </div>

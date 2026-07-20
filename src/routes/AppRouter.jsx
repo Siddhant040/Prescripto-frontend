@@ -29,6 +29,7 @@ import AppointmentDetailPage from "../features/appointments/page/AppointmentDeta
 import BookingPage from "../features/appointments/page/BookingPage";
 import DoctorAppointments from "../features/appointments/page/DoctorAppointments";
 import DoctorAppointmentDetailPage from "../features/appointments/page/DoctorAppointmentDetailPage";
+import PatientPaymentPage from "../features/payments/page/PaymentCheckoutPage";
 
 //         const router = createBrowserRouter([
 //   {
@@ -177,6 +178,14 @@ const router = createBrowserRouter([
           {
             path: "create-doctor-profile",
             element: <CreateDoctorProfile />,
+          },
+          {
+            path: "payment",
+            element: <PatientPaymentPage />,
+          },
+          {
+            path: "payment",
+            element: <PaymentTest />,
           },
 
 

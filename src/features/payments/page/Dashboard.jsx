@@ -6,7 +6,7 @@ import {
   createPaymentOrder,
   getMyPayments,
   verifyPayment
-} from "../services/paymentServices";
+} from "../../../api/payment.api";
 
 
 const PaymentTest = () => {

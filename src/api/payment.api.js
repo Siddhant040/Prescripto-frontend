@@ -1,4 +1,4 @@
-import api from "../../../api/axios";
+import api from "./axios";
 
 export const createPaymentOrder = async (paymentData) => {
   const response = await api.post("/payment/create-order", paymentData);
@@ -12,5 +12,10 @@ export const verifyPayment = async (paymentData) => {
 
 export const getMyPayments = async () => {
   const response = await api.get("/payment/me");
+  return response.data;
+};
+
+export const getPaymentById = async (id) => {
+  const response = await api.get(`/payment/${id}`);
   return response.data;
 };

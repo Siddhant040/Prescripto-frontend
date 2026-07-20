@@ -68,7 +68,7 @@ export const getAppointmentInfoRows = (appointment) => [
   },
   {
     label: "Payment Status",
-    value: appointment.paymentStatus || "Not available",
+    value: appointment.paymentStatus || "Not Initiated",
     icon: ReceiptIndianRupee,
   },
 ];

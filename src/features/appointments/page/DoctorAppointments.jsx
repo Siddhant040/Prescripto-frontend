@@ -10,10 +10,11 @@ import { useAppointments } from "../hooks/useAppointment";
 import { useEffect } from "react";
 
 function DoctorAppointments() {
-  const {handleDoctorAppointments,doctorAppointments,doctorListLoading} = useAppointments();
+  const [page, setPage] = useState(1);
+  const {handleDoctorAppointments,doctorAppointments,doctorListLoading,pagination} = useAppointments();
   useEffect(() => {
-    handleDoctorAppointments();
-  }, []);
+    handleDoctorAppointments(page,10);
+  }, [page]);
   
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -112,9 +113,10 @@ function DoctorAppointments() {
         />
         <DoctorAppointmentList
           appointments={filteredAppointments}
-          page={1}
-          limit={10}
-          total={filteredAppointments.length}
+          page={pagination.page}
+          limit={pagination.limit}
+          total={pagination.total}
+          onPageChange={setPage}
         />
       </div>
     </div>

@@ -2,7 +2,7 @@ import { CalendarPlus } from "lucide-react";
 import AppointmentFilters from "../components/AppointmentFilters";
 import AppointmentList from "../components/AppointmentList";
 import AppointmentStats from "../components/AppointmentStats";
-import { useEffect,useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useState } from "react";
 import { useAppointments } from "../hooks/useAppointment";
 import {
@@ -12,21 +12,23 @@ import {
 
 function Appointments() {
   const appointments = sampleAppointments;
-  const { handlePatientAppointments, Appointments, listLoading } = useAppointments();
+  const { handlePatientAppointments, Appointments, listLoading, patientPagination } = useAppointments();
+  const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
 
   useEffect(() => {
-    handlePatientAppointments();
-  }, []);
- 
-  console.log("Appointments",Appointments);
+    handlePatientAppointments(page, 10);
+  }, [page]);
+
+  console.log("Appointments", Appointments);
+  
   const stats = getAppointmentStats(Appointments);
 
   const filteredAppointments = useMemo(() => {
-    let filtered =[...Appointments] 
+    let filtered = [...Appointments]
     //1.Search
     if (searchTerm.trim()) {
       filtered = filtered.filter((item) =>
@@ -40,59 +42,59 @@ function Appointments() {
       );
     }
     // 3. Date
-if (dateFilter !== "all") {
-  const today = new Date();
+    if (dateFilter !== "all") {
+      const today = new Date();
 
-  filtered = filtered.filter((item) => {
-    const appointmentDate = new Date(item.date);
+      filtered = filtered.filter((item) => {
+        const appointmentDate = new Date(item.date);
 
-    switch (dateFilter) {
-      case "today":
-        return (
-          appointmentDate.toDateString() === today.toDateString()
-        );
+        switch (dateFilter) {
+          case "today":
+            return (
+              appointmentDate.toDateString() === today.toDateString()
+            );
 
-      case "week": {
-        const weekFromNow = new Date();
-        weekFromNow.setDate(today.getDate() + 7);
+          case "week": {
+            const weekFromNow = new Date();
+            weekFromNow.setDate(today.getDate() + 7);
 
-        return (
-          appointmentDate >= today &&
-          appointmentDate <= weekFromNow
-        );
+            return (
+              appointmentDate >= today &&
+              appointmentDate <= weekFromNow
+            );
+          }
+
+          case "month":
+            return (
+              appointmentDate.getMonth() === today.getMonth() &&
+              appointmentDate.getFullYear() === today.getFullYear()
+            );
+
+          default:
+            return true;
+        }
+      });
+    }
+    // 4. Sort
+    filtered.sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+
+      if (sortBy === "newest") {
+        return dateB - dateA;
       }
 
-      case "month":
-        return (
-          appointmentDate.getMonth() === today.getMonth() &&
-          appointmentDate.getFullYear() === today.getFullYear()
-        );
+      if (sortBy === "oldest") {
+        return dateA - dateB;
+      }
 
-      default:
-        return true;
-    }
-  });
-}
-// 4. Sort
-filtered.sort((a, b) => {
-  const dateA = new Date(a.date);
-  const dateB = new Date(b.date);
+      return 0;
+    });
 
-  if (sortBy === "newest") {
-    return dateB - dateA;
-  }
 
-  if (sortBy === "oldest") {
-    return dateA - dateB;
-  }
-
-  return 0;
-});
-    
-    
     return filtered
   }, [Appointments, searchTerm, statusFilter, dateFilter, sortBy]);
-   if (listLoading) {
+  if (listLoading) {
     return <div>Loading...</div>
   }
 
@@ -134,9 +136,10 @@ filtered.sort((a, b) => {
         />
         <AppointmentList
           appointments={filteredAppointments}
-          page={1}
-          limit={10}
-          total={filteredAppointments.length}
+         page={patientPagination.page}
+          limit={patientPagination.limit}
+          total={patientPagination.total}
+          onPageChange={setPage}
         />
       </div>
     </div>

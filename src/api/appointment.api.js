@@ -1,7 +1,17 @@
 import api from "./axios";
 
-export const patientAppointments = async()=>{
-    const response = await api.get("/appointment/");
+export const patientAppointments = async({
+  page = 1,
+  limit = 10,
+  
+
+}={})=>{
+    const response = await api.get("/appointment/",{
+        params:{
+            page,
+            limit,
+        }
+    });
     return response.data;
 }
 export const getAppointmentbyId = async (id)=>{
@@ -31,10 +41,19 @@ export const rescheduleAppointment = async (id, data) => {
   return response.data;
 }
 
-export const getDoctorAppointments = async (id) => {
-  const response = await api.get(`/appointment/doctor`);
+export const getDoctorAppointments = async ({
+  page = 1,
+  limit = 10,
+} = {}) => {
+  const response = await api.get("/appointment/doctor", {
+    params: {
+      page,
+      limit,
+    },
+  });
+
   return response.data;
-}
+};
  export const updateAppointmentStatus = async (id , status) => {
   const response = await api.patch(`/appointment/${id}/status`,
   {status});

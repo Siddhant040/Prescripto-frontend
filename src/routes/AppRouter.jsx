@@ -18,7 +18,7 @@ import PublicDoctorDetails from "../features/doctors/page/PublicDoctorDetails";
 import Appointments from "../features/appointments/page/Appointments";
 import Profile from "../features/patients/page/Dashboard";
 import PatientProfilePage from "../features/patients/page/PatientProfilePage";
-import PaymentTest from "../features/payments//page/Dashboard"
+
 import AccountSettingPage from "../features/patients/page/AccountSettingPage";
 import PatientDoctorDetails from "../features/doctors/page/PatientDoctorDetails";
 import DoctorLayout from "../layouts/doctorLayout";
@@ -30,6 +30,9 @@ import BookingPage from "../features/appointments/page/BookingPage";
 import DoctorAppointments from "../features/appointments/page/DoctorAppointments";
 import DoctorAppointmentDetailPage from "../features/appointments/page/DoctorAppointmentDetailPage";
 import PatientPaymentPage from "../features/payments/page/PaymentCheckoutPage";
+import PaymentDetails from "../features/payments/page/PaymentDetails";
+import DoctorPayment from "../features/payments/page/DoctorPayment";
+import DoctorPaymentDetails from "../features/payments/page/DoctorPaymentDetails";
 
 //         const router = createBrowserRouter([
 //   {
@@ -183,9 +186,10 @@ const router = createBrowserRouter([
             path: "payment",
             element: <PatientPaymentPage />,
           },
+         
           {
-            path: "payment",
-            element: <PaymentTest />,
+            path: "payment/:id",
+            element: <PaymentDetails />,
           },
 
 
@@ -238,6 +242,15 @@ const router = createBrowserRouter([
             path: "appointments/:id",
             element: <DoctorAppointmentDetailPage />,
           },
+          {
+            path: "payment",
+            element: <DoctorPayment />,
+          },
+          {
+            path: "payment/:id",
+            element: <DoctorPaymentDetails />,
+          },
+          
 
         ],
       },

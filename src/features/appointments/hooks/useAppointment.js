@@ -1,44 +1,61 @@
-import { 
+import {
     patientAppointments,
-     getAppointmentbyId,
-      cancelAppointment,
-       getAvailableSlots,
-        createAppointment,
-         rescheduleAppointment,
-        getDoctorAppointments,
-        updateAppointmentStatus,
-         createPrescription } from "../../../api/appointment.api";
+    getAppointmentbyId,
+    cancelAppointment,
+    getAvailableSlots,
+    createAppointment,
+    rescheduleAppointment,
+    getDoctorAppointments,
+    updateAppointmentStatus,
+    createPrescription
+} from "../../../api/appointment.api";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
 export const useAppointments = () => {
     const [Appointments, setAppointments] = useState([]);
-    
-  const [listLoading, setListLoading] = useState(false);
-  const [selectedAppointment, setSelectedAppointment] = useState(null);
-  const [appointmentLoading, setAppointmentLoading] = useState(false);
-  const [canceling, setCanceling] = useState(false);
-  const [slot , setSlot] = useState(null);
-  const [slotLoading, setSlotLoading] = useState(false);
-  const [creating, setCreating] = useState(false);
-  const [rescheduling, setRescheduling] = useState(false);
-  const [doctorAppointments, setDoctorAppointments] = useState([]);
-  const [doctorListLoading, setDoctorListLoading] = useState(false);
-  const [updating, setUpdating] = useState(false);
-  const [creatingPrescription, setCreatingPrescription] = useState(false);
-    
+
+    const [listLoading, setListLoading] = useState(false);
+    const [selectedAppointment, setSelectedAppointment] = useState(null);
+    const [appointmentLoading, setAppointmentLoading] = useState(false);
+    const [canceling, setCanceling] = useState(false);
+    const [slot, setSlot] = useState(null);
+    const [slotLoading, setSlotLoading] = useState(false);
+    const [creating, setCreating] = useState(false);
+    const [rescheduling, setRescheduling] = useState(false);
+    const [doctorAppointments, setDoctorAppointments] = useState([]);
+    const [doctorListLoading, setDoctorListLoading] = useState(false);
+    const [updating, setUpdating] = useState(false);
+    const [creatingPrescription, setCreatingPrescription] = useState(false);
+    const [pagination, setPagination] = useState({
+        total: 0,
+        page: 1,
+        limit: 10,
+    });
+    const [patientPagination, setPatientPagination] = useState({
+        page: 1,
+        limit: 10,
+        total: 0,
+    });
 
 
-    const handlePatientAppointments = async () => {
+
+
+    const handlePatientAppointments = async (page = 1, limit = 10) => {
+        setListLoading(true);
         try {
-            setListLoading(true);
-            const response = await patientAppointments();
+            const response = await patientAppointments({ page, limit });
             setAppointments(response.data?.appointments ?? []);
+            setPatientPagination({
+                page: response.data.page,
+                limit: response.data.limit,
+                total: response.data.total,
+            });
             return response.data?.appointments ?? [];
         } catch (error) {
             console.log(error);
             toast.error("Unable to fetch appointments");
-        }finally {
+        } finally {
             setListLoading(false);
         }
     };
@@ -51,7 +68,7 @@ export const useAppointments = () => {
         } catch (error) {
             console.log(error);
             toast.error("Unable to fetch appointments");
-        }finally {
+        } finally {
             setAppointmentLoading(false);
         }
     };
@@ -64,20 +81,20 @@ export const useAppointments = () => {
         } catch (error) {
             console.log(error);
             toast.error("Unable to cancel appointments");
-        }finally {
+        } finally {
             setCanceling(false);
         }
     };
-    const handleGetAvailableSlots = async (id,date) => {
+    const handleGetAvailableSlots = async (id, date) => {
         setSlotLoading(true);
         try {
-            const response = await getAvailableSlots(id,date);
+            const response = await getAvailableSlots(id, date);
             setSlot(response.data);
             return response.data;
         } catch (error) {
             console.log(error);
             toast.error("Unable to get available slots");
-        }finally {
+        } finally {
             setSlotLoading(false);
         }
     };
@@ -90,47 +107,56 @@ export const useAppointments = () => {
         } catch (error) {
             console.log(error);
             toast.error(error.response.message);
-        }finally {
+        } finally {
             setCreating(false);
         }
     };
-    const handleRescheduleAppointment = async (id,data) => {
-        
+    const handleRescheduleAppointment = async (id, data) => {
+
         try {
             setRescheduling(true);
-            const response = await rescheduleAppointment(id,data);
+            const response = await rescheduleAppointment(id, data);
             return response.data;
         } catch (error) {
             console.log(error);
             toast.error(error.response.data.message);
-        }finally {
+        } finally {
             setRescheduling(false);
         }
     };
-    const handleDoctorAppointments = async () => {
+    const handleDoctorAppointments = async (page = 1, limit = 10) => {
+        setDoctorListLoading(true);
         try {
-            setDoctorListLoading(true);
-            const response = await getDoctorAppointments();
+
+            const response = await getDoctorAppointments({ page, limit });
+
             setDoctorAppointments(response.data?.appointments ?? []);
+
+            setPagination({
+                total: response.data?.total ?? 0,
+                page: response.data?.page ?? page,
+                limit: response.data?.limit ?? limit,
+            });
+
             return response.data?.appointments ?? [];
         } catch (error) {
             console.log(error);
             toast.error("Unable to fetch appointments");
-        }finally {
+        } finally {
             setDoctorListLoading(false);
         }
     };
-    const handleUpdateAppointmentStatus = async (id,status) => {
-        
+    const handleUpdateAppointmentStatus = async (id, status) => {
+
         setUpdating(true);
         try {
-            const response = await updateAppointmentStatus(id,status);
+            const response = await updateAppointmentStatus(id, status);
             toast.success(response.message);
             return response.data;
         } catch (error) {
             console.log(error);
             toast.error(error.response.message);
-        }finally {
+        } finally {
             setUpdating(false);
         }
     };
@@ -152,7 +178,7 @@ export const useAppointments = () => {
 
 
 
-    return{
+    return {
         handlePatientAppointments,
         Appointments,
         listLoading,
@@ -174,7 +200,9 @@ export const useAppointments = () => {
         handleUpdateAppointmentStatus,
         updating,
         handleCreatePrescription,
-        creatingPrescription
+        creatingPrescription,
+        pagination,
+        patientPagination
     }
 
 }

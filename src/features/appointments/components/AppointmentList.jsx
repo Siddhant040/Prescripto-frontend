@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import AppointmentCard from "./AppointmentCard";
 
-const AppointmentList = ({ appointments, page, limit, total }) => {
+const AppointmentList = ({ appointments, page, limit, total, onPageChange }) => {
   const totalPages = Math.max(1, Math.ceil(total / limit));
 
   return (
@@ -46,6 +46,8 @@ const AppointmentList = ({ appointments, page, limit, total }) => {
         <div className="flex items-center gap-2">
           <button
             type="button"
+            disabled={page === 1}
+            onClick={()=> onPageChange(page - 1)}
             className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50"
           >
             <ChevronLeft className="h-4 w-4" />
@@ -58,6 +60,8 @@ const AppointmentList = ({ appointments, page, limit, total }) => {
           </button>
           <button
             type="button"
+            disabled={page === totalPages}
+            onClick={() =>onPageChange(page + 1)}
             className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50"
           >
             <ChevronRight className="h-4 w-4" />

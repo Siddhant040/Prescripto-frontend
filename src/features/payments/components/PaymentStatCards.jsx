@@ -1,31 +1,31 @@
 const PaymentStatCards = ({ stats }) => {
   return (
-    <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
       {stats.map((stat) => {
         const Icon = stat.icon;
 
         return (
-          <article
+          <section
             key={stat.label}
-            className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-[0_14px_40px_rgba(15,23,42,0.08)]"
+            className="rounded-[20px] border border-emerald-100/70 bg-white p-4 shadow-[0_10px_24px_rgba(15,23,42,0.04)]"
           >
             <div className="flex items-center justify-between gap-3">
-              <span
-                className={`flex h-11 w-11 items-center justify-center rounded-2xl ${stat.accent}`}
-              >
+              <div>
+                <p className="text-sm font-medium text-slate-500">
+                  {stat.label}
+                </p>
+                <p className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">
+                  {stat.value}
+                </p>
+              </div>
+
+              <span className={`flex h-11 w-11 items-center justify-center rounded-2xl ${stat.accent}`}>
                 <Icon className="h-5 w-5" />
-              </span>
-              <span className="text-sm font-semibold text-slate-500">
-                {stat.label}
               </span>
             </div>
 
-            <p className="mt-6 text-3xl font-semibold text-slate-950">
-              {stat.value}
-            </p>
-
             <p className="mt-2 text-sm text-slate-500">{stat.note}</p>
-          </article>
+          </section>
         );
       })}
     </div>

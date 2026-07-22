@@ -12,6 +12,7 @@ import {
   User,
   ChevronRight,
   LogOut,
+  History
 } from "lucide-react";
 import { Link, useNavigate, NavLink } from "react-router-dom";
 import SidebarSupportCard from "../../../components/layouts/SidebarSupportCard";
@@ -24,9 +25,10 @@ const navigationItems = [
   { label: "Dashboard", to: "/doctor-dashboard",end: true ,icon: LayoutGrid },
   { label: "Appointments", to: "/doctor-dashboard/appointments", icon: Clock3 },
   { label: "Patients", to: "/doctor-dashboard/patients", icon: Users },
-
   { label: "Reviews", to: "/doctor-dashboard/reviews", icon: Star },
-  { label: "Settings", to: "/doctor-dashboard/doctor-settings", icon: Settings },
+  {label: "Payments",to: "/doctor-dashboard/payment", icon: History},
+  
+
 ];
 const getInitials = (name) => {
   if (!name) return "AM";

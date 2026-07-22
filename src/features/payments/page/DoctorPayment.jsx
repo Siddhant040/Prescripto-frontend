@@ -4,33 +4,23 @@ import PaymentFilters from "../components/PaymentFilters";
 import PaymentStatCards from "../components/PaymentStatCards";
 import PaymentTable from "../components/PaymentTable";
 import { usePayment } from "../hooks/usePayment";
-import { useParams } from "react-router-dom";
 
-
-const PatientPaymentPage = () => {
-  
+function DoctorPayment() {
+  const { handleLoadPayments, payments, isLoadingPayments } = usePayment();
 
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("All");
   const [method, setMethod] = useState("All");
   const [page, setPage] = useState(1);
-  const limit= 10
-  ;
-
-  const {
-    payments,
-    isLoadingPayments,
-    handleLoadPayments,
-  } = usePayment();
+  const limit = 10;
 
   useEffect(() => {
-    handleLoadPayments(page, 10);
-  }, [page]);
+    handleLoadPayments(page, limit);
+  }, [page, handleLoadPayments]);
 
   useEffect(() => {
     setPage(1);
   }, [search, status, method]);
-  console.log(payments);
 
   const filteredPayments = useMemo(() => {
     const normalizedSearch = search.trim().toLowerCase();
@@ -38,13 +28,14 @@ const PatientPaymentPage = () => {
     const normalizedMethod = method.toLowerCase();
 
     return payments.filter((payment) => {
-      const paymentStatus = String(payment.status || "Pending").toLowerCase();
-      const paymentMethod = String(payment.method || payment.provider || "Razorpay").toLowerCase();
+      const paymentStatus = String(payment.status || "").toLowerCase();
+      const paymentMethod = String(payment.provider || "razorpay").toLowerCase();
       const searchText = [
-        payment.doctor,
-        payment.speciality,
         payment.id,
-        payment.appointmentDate,
+        payment.patient?.name,
+        payment.patient?.email,
+        payment.speciality,
+        payment.appointment?.id,
       ]
         .join(" ")
         .toLowerCase();
@@ -65,69 +56,58 @@ const PatientPaymentPage = () => {
     return filteredPayments.slice(start, start + limit);
   }, [filteredPayments, page]);
 
-  const paymentSummary = useMemo(() => {
-    const paidPayments = payments.filter(
-      (payment) => String(payment.status || "").toLowerCase() === "paid"
-    );
-    const pendingPayments = payments.filter(
-      (payment) => String(payment.status || "").toLowerCase() === "pending"
-    );
+  const summary = useMemo(() => {
+    const paid = payments.filter((payment) => payment.status === "paid");
+    const pending = payments.filter((payment) => payment.status === "pending");
 
     return {
       total: payments.length,
-      paidAmount: paidPayments.reduce((total, payment) => total + (payment.amount || 0), 0),
-      pendingAmount: pendingPayments.reduce((total, payment) => total + (payment.amount || 0), 0),
-      paidCount: paidPayments.length,
-      pendingCount: pendingPayments.length,
+      earned: paid.reduce((sum, payment) => sum + payment.amount, 0),
+      pending: pending.length,
+      pendingAmount: pending.reduce((sum, payment) => sum + payment.amount, 0),
     };
   }, [payments]);
 
   const stats = [
     {
       label: "Total Payments",
-      value: paymentSummary.total,
-      note: "All payments in your account",
+      value: summary.total,
+      note: "All patient transactions",
       icon: ReceiptText,
       accent: "bg-slate-100 text-slate-700",
     },
     {
-      label: "Paid Amount",
-      value: `₹${paymentSummary.paidAmount}`,
-      note: `${paymentSummary.paidCount} payments collected`,
+      label: "Earnings",
+      value: `Rs. ${summary.earned}`,
+      note: "Successfully paid",
       icon: IndianRupee,
       accent: "bg-teal-50 text-teal-700",
     },
     {
-      label: "Pending Payments",
-      value: paymentSummary.pendingCount,
-      note: "Payments waiting for completion",
+      label: "Pending",
+      value: summary.pending,
+      note: `Rs. ${summary.pendingAmount} outstanding`,
       icon: Clock3,
       accent: "bg-amber-50 text-amber-700",
     },
     {
       label: "Pending Amount",
-      value: `₹${paymentSummary.pendingAmount}`,
+      value: `₹${summary.pendingAmount}`,
       note: "Outstanding amount in checkout",
       icon: CreditCard,
       accent: "bg-amber-50 text-amber-700",
     },
   ];
-  
-
-  if (isLoadingPayments) {
-    return <div>Loading...</div>;
-  }
-  
 
   return (
     <div className="w-full px-1 pb-1">
       <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-emerald-700">
-            My payments
+            Doctor payments
           </p>
           <h1 className="mt-1.5 text-2xl font-semibold tracking-tight text-slate-950">
-            Manage your payments
+            Track patient payments and earnings.
           </h1>
         </div>
       </div>
@@ -149,11 +129,14 @@ const PatientPaymentPage = () => {
           limit={limit}
           total={filteredPayments.length}
           onPageChange={setPage}
-          
+          detailsBasePath="/doctor-dashboard/payment"
+          pendingAction="details"
+          displayPerson="patient"
+          subtitleText="Consultation"
         />
       </div>
     </div>
   );
-};
+}
 
-export default PatientPaymentPage;
+export default DoctorPayment;

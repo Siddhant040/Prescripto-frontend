@@ -16,6 +16,7 @@ import { handlePaynow } from "../../payments/services/paymentService";
 import { usePayment } from "../../payments/hooks/usePayment";
 import { useAuth } from "../../auth/hooks/checkAuth";
 import toast from "react-hot-toast";
+import { ReviewSection } from "../../review/component/reviewSection";
 
 function AppointmentDetailPage() {
   const navigate = useNavigate();
@@ -56,13 +57,14 @@ function AppointmentDetailPage() {
   };
 
   const handleReschedule = () => {
-  navigate(`/profile/doctors/${appointment.doctor.id}/booking`, {
-    state: {
-      isReschedule: true,
-      appointmentId: appointment.id,
-    },
-  });
-};
+    navigate(`/profile/doctors/${appointment.doctor.id}/booking`, {
+      state: {
+        isReschedule: true,
+        appointmentId: appointment.id,
+      },
+    });
+  };
+  console.log("payments", appointment.paymentStatus);
 
   return (
     <div className="w-full px-1 pb-1">
@@ -101,7 +103,14 @@ function AppointmentDetailPage() {
 
         <AppointmentTimeline status={appointment.status} />
 
-        <AppointmentActions
+       
+  {appointment.status === "completed" ? (
+    <ReviewSection 
+    review={appointment?.review}
+    onRefresh={()=>handleGetAppointmentbyId(id)}
+      />
+  ) : (
+    <AppointmentActions
           appointment={appointment}
           onCancel={cancelAppointment}
           isCancelling={canceling}
@@ -111,6 +120,10 @@ function AppointmentDetailPage() {
           isPaid={appointment.paymentStatus === "paid"}
           isCreating={isCreating}
         />
+  )}
+
+
+       
       </div>
     </div>
   );

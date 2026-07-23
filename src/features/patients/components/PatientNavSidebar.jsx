@@ -13,6 +13,7 @@ import {
   Stethoscope,
   User,
   History,
+  MessageCircle,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { Link, NavLink, useNavigate } from "react-router-dom";
@@ -21,6 +22,7 @@ const navigationItems = [
   { label: "Dashboard", to: "/profile", end: true, icon: LayoutGrid },
   { label: "Appointments", to: "/profile/appointments", icon: CalendarRange },
   { label: "Doctors", to: "/profile/doctors", icon: Stethoscope },
+  {label : "Reviews",to:"/profile/reviews",icon:MessageCircle},
   {label:"Payments",to:"/profile/payment",icon:History},
 
 ];

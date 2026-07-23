@@ -63,7 +63,7 @@ export const useAppointments = () => {
         setAppointmentLoading(true);
         try {
             const response = await getAppointmentbyId(id);
-            setSelectedAppointment(response.data);
+            setSelectedAppointment(response.data ?? null);
             return response.data;
         } catch (error) {
             console.log(error);

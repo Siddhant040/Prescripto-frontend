@@ -116,6 +116,7 @@ const Header = () => {
 
           <div className="flex items-center gap-3">
             <button
+            onClick={() => navigate("/profile/notifications")}
               type="button"
               className="relative inline-flex h-11 w-11 items-center justify-center rounded-full border border-emerald-100 bg-white text-slate-700 transition hover:border-emerald-200 hover:text-emerald-700"
             >

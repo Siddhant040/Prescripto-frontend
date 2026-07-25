@@ -35,6 +35,8 @@ import DoctorPayment from "../features/payments/page/DoctorPayment";
 import DoctorPaymentDetails from "../features/payments/page/DoctorPaymentDetails";
 import PatientReviews from "../features/review/page/PatientReviews";
 import DoctorReviews from "../features/review/page/DoctorReviews";
+import PatientNotification from "../features/notification/page/PatientNotification";
+import DoctorNotification from "../features/notification/page/DoctorNotification";
 
 //         const router = createBrowserRouter([
 //   {
@@ -198,6 +200,10 @@ const router = createBrowserRouter([
             path: "reviews",
             element: <PatientReviews />,
           },
+          {
+            path:"notifications",
+            element:<PatientNotification/>,
+          },
 
 
           // LIST PAGE
@@ -260,7 +266,11 @@ const router = createBrowserRouter([
           {path:"reviews",
           element:<DoctorReviews/>
 
-          }
+          },
+          {
+            path:"notifications",
+            element:<DoctorNotification/>,
+          },
           
 
         ],

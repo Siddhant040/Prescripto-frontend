@@ -1,0 +1,111 @@
+export const fallbackNotifications = [
+  {
+    id: "1",
+    type: "appointment_booked",
+    title: "New Appointment Booked",
+    message: "Riya Sharma booked an appointment with you for tomorrow at 10:00 AM.",
+    entityId: "appointment-101",
+    entityType: "appointment",
+    isRead: false,
+    createdAt: "2026-07-24T09:15:00.000Z",
+  },
+
+  {
+    id: "2",
+    type: "appointment_confirmed",
+    title: "Appointment Confirmed",
+    message: "Your appointment with Dr. Sarah Wilson has been confirmed.",
+    entityId: "appointment-102",
+    entityType: "appointment",
+    isRead: false,
+    createdAt: "2026-07-24T08:20:00.000Z",
+  },
+
+  {
+    id: "3",
+    type: "appointment_cancelled",
+    title: "Appointment Cancelled",
+    message: "Your appointment scheduled for 25 Jul has been cancelled by the doctor.",
+    entityId: "appointment-103",
+    entityType: "appointment",
+    isRead: true,
+    createdAt: "2026-07-23T17:10:00.000Z",
+  },
+
+  {
+    id: "4",
+    type: "payment_success",
+    title: "Payment Successful",
+    message: "Your consultation payment of ₹500 has been received successfully.",
+    entityId: "payment-201",
+    entityType: "payment",
+    isRead: false,
+    createdAt: "2026-07-23T15:40:00.000Z",
+  },
+
+  {
+    id: "5",
+    type: "payment_failed",
+    title: "Payment Failed",
+    message: "We couldn't process your recent payment. Please try again.",
+    entityId: "payment-202",
+    entityType: "payment",
+    isRead: true,
+    createdAt: "2026-07-22T14:10:00.000Z",
+  },
+
+  {
+    id: "6",
+    type: "review_received",
+    title: "New Review Received",
+    message: "Riya Sharma left you a 5-star review for your recent consultation.",
+    entityId: "appointment-104",
+    entityType: "review",
+    isRead: false,
+    createdAt: "2026-07-22T11:45:00.000Z",
+  },
+
+  {
+    id: "7",
+    type: "review_received",
+    title: "New Review Received",
+    message: "Rahul Singh rated your consultation 4 stars and shared feedback.",
+    entityId: "appointment-105",
+    entityType: "review",
+    isRead: true,
+    createdAt: "2026-07-21T18:20:00.000Z",
+  },
+
+  {
+    id: "8",
+    type: "doctor_verified",
+    title: "Profile Verified",
+    message: "Congratulations! Your doctor profile has been verified by the admin.",
+    entityId: "doctor-1",
+    entityType: "doctor",
+    isRead: true,
+    createdAt: "2026-07-21T09:00:00.000Z",
+  },
+
+  {
+    id: "9",
+    type: "system",
+    title: "Welcome to Prescripto+",
+    message: "Explore your dashboard to manage appointments, payments and reviews efficiently.",
+    entityId: null,
+    entityType: "system",
+    isRead: true,
+    createdAt: "2026-07-20T08:00:00.000Z",
+  },
+
+  {
+    id: "10",
+    type: "appointment_completed",
+    title: "Appointment Completed",
+    message: "Your appointment has been marked as completed. You can now leave a review.",
+    entityId: "appointment-106",
+    entityType: "appointment",
+    isRead: false,
+    createdAt: "2026-07-19T16:45:00.000Z",
+  },
+];

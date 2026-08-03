@@ -40,6 +40,7 @@ export const useAuth = () => {
       setLogging(true);
       const response = await loginUser(userData);
       setUser(response.data?.user || response.data || null);
+      
       return response;
     } finally {
       setLogging(false);

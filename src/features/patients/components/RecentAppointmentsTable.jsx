@@ -1,3 +1,4 @@
+import {useNavigate} from "react-router-dom"
 const statusClasses = {
   Upcoming: "bg-emerald-50 text-emerald-700 ring-emerald-200",
   Completed: "bg-teal-50 text-teal-700 ring-teal-200",
@@ -5,6 +6,7 @@ const statusClasses = {
 };
 
 const RecentAppointmentsTable = ({ appointments }) => {
+  const navigate = useNavigate();
   return (
     <section className="rounded-[20px] border border-emerald-100/70 bg-white p-5 shadow-[0_10px_24px_rgba(15,23,42,0.04)]">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
@@ -16,15 +18,23 @@ const RecentAppointmentsTable = ({ appointments }) => {
             Booking history
           </h2>
         </div>
-        <button
-          type="button"
-          className="text-sm font-semibold text-emerald-700 transition hover:text-emerald-800"
-        >
-          View all
-        </button>
+        
       </div>
 
-      <div className="mt-4 hidden overflow-x-auto lg:block">
+      {appointments.length === 0 ? (
+        <div className="mt-4 rounded-[1.5rem] border border-dashed border-emerald-100 bg-slate-50 p-6 text-center">
+          <p className="font-semibold text-slate-950">No appointments yet</p>
+          <p className="mt-2 text-sm text-slate-600">
+            Your recent booking history will appear here after you book a visit.
+          </p>
+        </div>
+      ) : null}
+
+      <div
+        className={`mt-4 overflow-x-auto ${
+          appointments.length === 0 ? "hidden" : "hidden lg:block"
+        }`}
+      >
         <table className="min-w-full table-fixed">
           <thead>
             <tr className="border-b border-slate-100 text-left text-sm text-slate-500">
@@ -65,6 +75,7 @@ const RecentAppointmentsTable = ({ appointments }) => {
                 <td className="h-16 text-right">
                   <button
                     type="button"
+                    onClick={()=>navigate(`/profile/appointments/${appointment.id}`)}
                     className="inline-flex h-9 items-center justify-center rounded-full border border-emerald-200 px-4 text-sm font-semibold text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-50"
                   >
                     View details

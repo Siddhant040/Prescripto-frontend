@@ -14,6 +14,7 @@ const DoctorCard = ({
   doctor,
   basePath = "/doctors",
 }) => {
+  console.log("doctor", doctor);
   const name = doctor.user?.name ?? "Doctor";
   const initials = getInitials(name) || "DR";
   const specialization = doctor.specialization ?? "Specialist";
@@ -22,12 +23,23 @@ const DoctorCard = ({
   const experience = doctor.experience ?? 0;
   const location = doctor.clinicAddress ?? "Clinic address not added";
   const fee = doctor.consultationFee ?? 0;
+  const avatar = doctor.user.avatar;
 
   return (
     <article className="rounded-[20px] border border-emerald-100/80 bg-white p-5 shadow-[0_10px_24px_rgba(15,23,42,0.04)] transition duration-200 hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-[0_16px_32px_rgba(15,118,110,0.08)]">
       <div className="flex justify-center">
-        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[linear-gradient(135deg,_#0f766e,_#34d399)] text-xl font-semibold text-white shadow-[0_12px_24px_rgba(15,118,110,0.18)]">
-          {initials}
+        <div className="flex justify-center">
+          <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(135deg,#0f766e,#34d399)] text-xl font-semibold text-white shadow-[0_12px_24px_rgba(15,118,110,0.18)]">
+            {avatar ? (
+              <img
+                src={avatar}
+                alt={name}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              initials
+            )}
+          </div>
         </div>
       </div>
 
@@ -58,7 +70,7 @@ const DoctorCard = ({
         </div>
 
         <Link
-           to={`${basePath}/${doctor._id}`}
+          to={`${basePath}/${doctor._id}`}
           className="mt-4 inline-flex h-10 w-full items-center justify-center rounded-full border border-emerald-200 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50"
         >
           View Profile

@@ -1,5 +1,3 @@
-import { useState, useEffect, } from "react";
-import { useParams } from "react-router-dom";
 import {
   BadgeCheck,
   Briefcase,
@@ -8,19 +6,20 @@ import {
   MapPin,
   Stethoscope,
 } from "lucide-react";
+import { useEffect, useState, } from "react";
 import { useAuth } from "../../auth/hooks/checkAuth";
 import AccountTimeline from "../../patients/components/profile/AccountTimeline";
 import EditPersonalInformation from "../../patients/components/profile/EditPersonalInformation";
 import PersonalInformation from "../../patients/components/profile/PersonalInformation";
 import ProfileHeroCard from "../../patients/components/profile/ProfileHeroCard";
 import EditProfessionalInformation from "../components/EditProfessionalInformation";
-import{useDoctor} from "../hooks/useDoctor";
+import { useDoctor } from "../hooks/useDoctor";
 
 
 
 function DoctorProfile() {
-  
-  
+
+
   const [editingSection, setEditingSection] = useState(null);
   const {
     user,
@@ -29,25 +28,25 @@ function DoctorProfile() {
     uploadAvatar,
     uploadingAvatar,
   } = useAuth();
-  const {handleGetloggedInDoctor,loggedInDoctor,handleUpdateDoctorProfile,updatingProfile} = useDoctor();
+  const { handleGetloggedInDoctor, loggedInDoctor, handleUpdateDoctorProfile, updatingProfile } = useDoctor();
 
   useEffect(() => {
     handleGetloggedInDoctor();
 
   }, []);
-   
-  
+
+
   const doctor = loggedInDoctor
   if (!doctor) {
-  return <div>Loading...</div>;
-}
-    
-  console.log("billu",doctor);
+    return <div>Loading...</div>;
+  }
+
+  console.log("billu", doctor);
   const doctorUser =
     typeof loggedInDoctor.user === "object" && loggedInDoctor.user !== null
       ? loggedInDoctor.user
       : user;
-  
+
 
 
   return (

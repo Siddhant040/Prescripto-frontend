@@ -13,18 +13,149 @@ function Doctors({ showSearch = true, insidePatientDashboard = false }) {
 
   }, [])
   const [activeCategoryId, setActiveCategoryId] = useState("all");
+  const [filters, setFilters] = useState({
+    search: "",
+    specialization: "",
+    experience: "",
+    fee: "",
+    sort: "popular",
+  });
   const activeCategory = doctorCategories.find(
     (category) => category.id === activeCategoryId
   );
   const visibleDoctors = useMemo(() => {
-    if (!activeCategory?.specialty) return doctors;
+    let filtered = [...doctors];
 
-    return doctors.filter(
-      (doctor) =>
-        doctor.specialization?.toLowerCase() ===
-        activeCategory.specialty.toLowerCase()
+    // Category
+    if (activeCategory?.specialty) {
+      filtered = filtered.filter(
+        (doctor) =>
+          doctor.specialization?.toLowerCase() ===
+          activeCategory.specialty.toLowerCase()
+      );
+    }
+
+    // Search
+    if (filters.search.trim()) {
+      const search = filters.search.toLowerCase();
+
+      filtered = filtered.filter(
+        (doctor) =>
+          doctor.user?.name?.toLowerCase().includes(search) ||
+          doctor.specialization?.toLowerCase().includes(search)
+      );
+    }
+
+    // Specialization
+    if (filters.specialization) {
+      filtered = filtered.filter(
+        (doctor) =>
+          doctor.specialization === filters.specialization
+      );
+    }
+
+    // Experience
+    if (filters.experience) {
+      filtered = filtered.filter(
+        (doctor) => doctor.experience >= Number(filters.experience)
+      );
+    }
+
+    // Fee
+    if (filters.fee) {
+      switch (filters.fee) {
+        case "700":
+          filtered = filtered.filter(
+            (doctor) => doctor.consultationFee < 700
+          );
+          break;
+
+        case "900":
+          filtered = filtered.filter(
+            (doctor) =>
+              doctor.consultationFee >= 700 &&
+              doctor.consultationFee <= 900
+          );
+          break;
+        case "1000":
+          filtered = filtered.filter(
+            (doctor) => doctor.consultationFee > 900
+          );
+          break;
+      }
+    }
+
+    // Sort
+    switch (filters.sort) {
+  case "feeLow":
+    filtered = [...filtered].sort(
+      (a, b) => a.consultationFee - b.consultationFee
     );
-  }, [activeCategory, doctors]);
+    break;
+
+  case "feeHigh":
+    filtered = [...filtered].sort(
+      (a, b) => b.consultationFee - a.consultationFee
+    );
+    break;
+
+  case "rating":
+    filtered = [...filtered].sort(
+      (a, b) => b.rating - a.rating
+    );
+    break;
+
+  default:
+    break;
+}
+
+return filtered;
+  }, [doctors, activeCategory, filters]);
+  const specializations = useMemo(() => {
+    return [...new Set(doctors.map((d) => d.specialization))]
+      .filter(Boolean)
+      .sort();
+  }, [doctors]);
+
+  const experienceOptions = [
+    { value: "5", label: "5+ Years" },
+    { value: "10", label: "10+ Years" },
+  ];
+
+  const feeOptions = [
+    { value: "700", label: "Under ₹700" },
+    { value: "900", label: "₹700 - ₹900" },
+    { value: "1000", label: "Above ₹900" },
+  ];
+
+  const sortOptions = [
+    { value: "popular", label: "Popular" },
+    { value: "rating", label: "Highest Rated" },
+    { value: "feeLow", label: "Fee: Low to High" },
+    { value: "feeHigh", label: "Fee: High to Low" },
+  ];
+
+  const categoriesWithCount = useMemo(() => {
+  return doctorCategories.map((category) => {
+    if (!category.specialty) {
+      return {
+        ...category,
+        count: doctors.length,
+      };
+    }
+
+    return {
+      ...category,
+      count: doctors.filter(
+        (doctor) =>
+          doctor.specialization?.toLowerCase() ===
+          category.specialty.toLowerCase()
+      ).length,
+    };
+  });
+}, [doctors]);
+
+  if (doctorLoading) return <h1>Loading...</h1>
 
 
 
@@ -56,9 +187,17 @@ function Doctors({ showSearch = true, insidePatientDashboard = false }) {
 
         </div>
 
-        <DoctorFilters showSearch={showSearch} />
+        <DoctorFilters
+          showSearch={showSearch}
+          filters={filters}
+          setFilters={setFilters}
+          specializations={specializations}
+          experienceOptions={experienceOptions}
+          feeOptions={feeOptions}
+          sortOptions={sortOptions}
+        />
         <DoctorCategoryStrip
-          categories={doctorCategories}
+          categories={categoriesWithCount}
           activeCategoryId={activeCategoryId}
           onCategoryChange={setActiveCategoryId}
         />

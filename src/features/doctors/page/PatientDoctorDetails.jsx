@@ -5,6 +5,7 @@ import { useDoctorDetails } from "../hooks/useDoctorDetails";
 function PatientDoctorDetails() {
   const { id } = useParams();
   const doctorDetails = useDoctorDetails(id);
+  
 
   if (doctorDetails.selectedDoctorLoading) {
     return <p>Loading...</p>;

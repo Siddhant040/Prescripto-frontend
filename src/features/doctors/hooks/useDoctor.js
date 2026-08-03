@@ -74,7 +74,7 @@ const handleGetReviewsbyId = async (id) => {
     catch (error) {
         console.log(error);
         setReviews([])
-        toast.error("Unable to fetch reviews");
+        
     }
 }
 const handleGetloggedInDoctor = async () => {
@@ -109,7 +109,7 @@ const handleUpdateDoctorProfile = async (data) => {
     }
 
     return response;
-  } catch (error) {
+  } catch  {
     toast.error("Unable to update doctor profile");
   } finally {
     setUpdatingProfile(false);
@@ -126,7 +126,7 @@ const handletoggleAvailability = async (data) => {
     }
 
     return response;
-  } catch (error) {
+  } catch  {
     toast.error("Unable to update doctor availability");
   } finally {
     setUpdatingAvailability(false);

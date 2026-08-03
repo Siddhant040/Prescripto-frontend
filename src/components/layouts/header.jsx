@@ -51,10 +51,10 @@ const Header = () => {
                             </NavLink>
                         ))}
                     </nav>
-                   <div className="hidden items-center gap-3 md:flex">
-  <Link
-    to="/login"
-   className="
+                    <div className="hidden items-center gap-3 md:flex">
+                        <Link
+                            to="/login"
+                            className="
 rounded-full
 border
 border-emerald-200
@@ -68,13 +68,13 @@ text-slate-700
 hover:border-emerald-300
 hover:bg-emerald-50
 "
-  >
-    Log in
-  </Link>
+                        >
+                            Log in
+                        </Link>
 
-  <Link
-    to="/register"
-className="
+                        <Link
+                            to="/register"
+                            className="
 rounded-full
 bg-gradient-to-r
 from-emerald-600
@@ -89,14 +89,14 @@ shadow-emerald-500/25
 transition
 hover:-translate-y-0.5
 "
-  >
-    Get Started
-  </Link>
-</div>
+                        >
+                            Get Started
+                        </Link>
+                    </div>
 
 
 
-                    
+
                 </div>
             </header>
         </>

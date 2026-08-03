@@ -1,65 +1,49 @@
-import { useEffect, useRef, useState } from "react";
-import { useAuth } from "../../auth/hooks/checkAuth";
-import SidebarSupportCard from "../../../components/layouts/SidebarSupportCard";
-import SwitchProfileCard from "../../../components/layouts/SwitchCard"
-import BecomeDoctorCard from "../../doctors/components/BecomeDoctorCard";
 import {
-  Bell,
   CalendarRange,
-  ChevronDown,
-  LayoutGrid,
-  LogOut,
-  Settings,
-  Stethoscope,
-  User,
   History,
+  LayoutGrid,
   MessageCircle,
+  Stethoscope
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import SidebarSupportCard from "../../../components/layouts/SidebarSupportCard";
+import SwitchProfileCard from "../../../components/layouts/SwitchCard";
+import { useAuth } from "../../auth/hooks/checkAuth";
+import BecomeDoctorCard from "../../doctors/components/BecomeDoctorCard";
+
 
 const navigationItems = [
   { label: "Dashboard", to: "/profile", end: true, icon: LayoutGrid },
   { label: "Appointments", to: "/profile/appointments", icon: CalendarRange },
   { label: "Doctors", to: "/profile/doctors", icon: Stethoscope },
-  {label : "Reviews",to:"/profile/reviews",icon:MessageCircle},
-  {label:"Payments",to:"/profile/payment",icon:History},
+  { label: "Reviews", to: "/profile/reviews", icon: MessageCircle },
+  { label: "Payments", to: "/profile/payment", icon: History },
 
 ];
 
-const getInitials = (name) => {
-  if (!name) return "AM";
 
-  return name
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase() || "")
-    .join("");
-};
 
 
 const PatientNavSidebar = () => {
-  const { user, handleChangeActiveRole, isChangingActiveRole  } = useAuth();
-  
+  const { user, handleChangeActiveRole, isChangingActiveRole } = useAuth();
+
   const navigate = useNavigate();
- 
-  
+
+
   const changeActiveRole = async () => {
     try {
       await handleChangeActiveRole("doctor");
       toast.success("profile changed successfully");
-       navigate( "/doctor-dashboard" );
+      navigate("/doctor-dashboard");
     } catch (error) {
       toast.error(error.response.data.message);
     }
   }
- 
 
-  const profileName = user?.name ?? "Guest";
 
-const profileEmail = user?.email ?? "";
-  const avatarFallback = getInitials(profileName);
+
+
   const isOnlyPatient =
     user?.roles?.length === 1 && user.roles.includes("patient");
 
@@ -129,16 +113,18 @@ const profileEmail = user?.email ?? "";
       </nav>
 
       <div className="mt-auto shrink-0 space-y-4">
-        <SidebarSupportCard />
-        {isOnlyPatient && <BecomeDoctorCard 
-        onClick={() => navigate("/profile/create-doctor-profile")}/>}
-{user?.roles?.includes("doctor") && (
-       <SwitchProfileCard
-           switchTo="Doctor"
-           onSwitch={changeActiveRole}
+        <SidebarSupportCard
+          onClick={() => navigate("/profile/contact")}
+        />
+        {isOnlyPatient && <BecomeDoctorCard
+          onClick={() => navigate("/profile/create-doctor-profile")} />}
+        {user?.roles?.includes("doctor") && (
+          <SwitchProfileCard
+            switchTo="Doctor"
+            onSwitch={changeActiveRole}
             isLoading={isChangingActiveRole}
-       />
-     )}
+          />
+        )}
       </div>
     </aside>
   );

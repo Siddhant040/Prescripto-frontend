@@ -63,7 +63,7 @@ export const doctorCategories = [
     count: 45,
     icon: Brain,
     accent: "bg-slate-100 text-slate-700",
-    specialty: "Neurologist",
+    specialty: "Neurology",
   },
   {
     id: "gastro",

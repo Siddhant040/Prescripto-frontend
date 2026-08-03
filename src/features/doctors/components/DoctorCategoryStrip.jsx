@@ -5,12 +5,7 @@ const DoctorCategoryStrip = ({ categories, activeCategoryId, onCategoryChange })
         <h2 className="text-base font-semibold text-slate-950">
           Browse by Category
         </h2>
-        <button
-          type="button"
-          className="text-sm font-semibold text-emerald-700 transition hover:text-emerald-800"
-        >
-          View all
-        </button>
+        
       </div>
 
       <div className="mt-3 flex gap-3 overflow-x-auto pb-1">

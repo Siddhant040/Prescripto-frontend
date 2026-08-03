@@ -1,17 +1,18 @@
 import { CalendarPlus } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import AppointmentFilters from "../components/AppointmentFilters";
 import AppointmentList from "../components/AppointmentList";
 import AppointmentStats from "../components/AppointmentStats";
-import { useEffect, useMemo } from "react";
-import { useState } from "react";
-import { useAppointments } from "../hooks/useAppointment";
 import {
   getAppointmentStats,
-  sampleAppointments,
+ 
 } from "../components/appointmentUiData";
+import { useAppointments } from "../hooks/useAppointment";
+import { useNavigate } from "react-router-dom";
 
 function Appointments() {
-  const appointments = sampleAppointments;
+  const navigate = useNavigate();
+ 
   const { handlePatientAppointments, Appointments, listLoading, patientPagination } = useAppointments();
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
@@ -24,7 +25,7 @@ function Appointments() {
   }, [page]);
 
   console.log("Appointments", Appointments);
-  
+
   const stats = getAppointmentStats(Appointments);
 
   const filteredAppointments = useMemo(() => {
@@ -115,6 +116,7 @@ function Appointments() {
 
         <button
           type="button"
+          onClick={()=>navigate("/profile/doctors")}
           className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-emerald-600 px-5 text-sm font-semibold text-white transition hover:bg-emerald-700"
         >
           <CalendarPlus className="h-4 w-4" />
@@ -136,7 +138,7 @@ function Appointments() {
         />
         <AppointmentList
           appointments={filteredAppointments}
-         page={patientPagination.page}
+          page={patientPagination.page}
           limit={patientPagination.limit}
           total={patientPagination.total}
           onPageChange={setPage}

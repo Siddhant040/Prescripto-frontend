@@ -1,6 +1,10 @@
 import { Star } from "lucide-react";
+import {useNavigate} from "react-router-dom"
 
 const RecommendedDoctors = ({ doctors }) => {
+  const navigate = useNavigate();
+
+  console.log("doctors",doctors); 
   return (
     <section>
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
@@ -14,11 +18,21 @@ const RecommendedDoctors = ({ doctors }) => {
         </div>
         <button
           type="button"
+          onClick={() => navigate("/doctors")}
           className="text-sm font-semibold text-emerald-700 transition hover:text-emerald-800"
         >
           Browse all doctors
         </button>
       </div>
+
+      {doctors.length === 0 ? (
+        <div className="mt-4 rounded-[20px] border border-dashed border-emerald-100 bg-white p-6 text-center shadow-[0_10px_24px_rgba(15,23,42,0.04)]">
+          <p className="font-semibold text-slate-950">No doctors available</p>
+          <p className="mt-2 text-sm text-slate-600">
+            Recommended doctors will appear here when profiles are available.
+          </p>
+        </div>
+      ) : null}
 
       <div className="mt-4 grid gap-5 lg:grid-cols-2 2xl:grid-cols-3">
         {doctors.map((doctor) => (
@@ -27,9 +41,17 @@ const RecommendedDoctors = ({ doctors }) => {
             className="rounded-[20px] border border-emerald-100/70 bg-white p-5 shadow-[0_10px_24px_rgba(15,23,42,0.04)] transition duration-200 hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-[0_16px_32px_rgba(15,118,110,0.08)]"
           >
             <div className="flex items-start gap-4">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[linear-gradient(135deg,_#ccfbf1,_#6ee7b7)] text-sm font-semibold text-emerald-900">
-                {doctor.avatarFallback}
-              </div>
+              {doctor.avatar ? (
+            <img
+              src={doctor.avatar}
+              alt={doctor.name}
+              className="h-14 w-14 rounded-2xl object-cover"
+            />
+          ) : (
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,_#0f766e,_#34d399)] text-sm font-semibold text-white">
+              {doctor.avatarFallback}
+            </div>
+          )}
               <div className="min-w-0">
                 <h3 className="truncate text-base font-semibold text-slate-950">
                   {doctor.name}
@@ -48,16 +70,12 @@ const RecommendedDoctors = ({ doctors }) => {
             <div className="mt-4 p-2 flex gap-3">
               <button
                 type="button"
+                onClick={()=>navigate(`/profile/doctors/${doctor.id}`)}
                 className="inline-flex  h-10 flex-1 items-center justify-center rounded-full bg-emerald-600 px-4 text-sm font-semibold text-white transition hover:bg-emerald-700"
               >
                 Book appointment
               </button>
-              <button
-                type="button"
-                className="inline-flex h-10 items-center justify-center rounded-full border border-emerald-200 px-4 text-sm font-semibold text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-50"
-              >
-                View profile
-              </button>
+              
             </div>
           </article>
         ))}

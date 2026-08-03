@@ -1,8 +1,15 @@
 import { ArrowRight, Headset } from "lucide-react";
 
-const SidebarSupportCard = () => {
+const SidebarSupportCard = ({
+  onClick
+}
+) => {
   return (
-    <button className="group flex w-full items-center justify-between rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3 transition hover:border-emerald-200 hover:bg-emerald-100">
+    <button
+    type="button"
+     onClick={onClick}
+     className="group flex w-full items-center justify-between rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3 transition hover:border-emerald-200 hover:bg-emerald-100">
+      
       <div className="flex items-center gap-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 text-white">
           <Headset className="h-5 w-5" />

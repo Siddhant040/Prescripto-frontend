@@ -12,7 +12,7 @@ const getLoginUser = (response) => response?.data?.user || response?.data || nul
 const getRoleRedirectPath = (activeRole) => {
   if (activeRole === "patient") return "/profile";
   if (activeRole === "doctor") return "/doctor-dashboard";
-  if (activeRole === "admin") return "/admin-dashboard";
+
   return "/";
 };
 
@@ -49,6 +49,7 @@ export default function Login() {
         email: data.email,
         password: data.password,
       });
+      
       const loggedInUser = getLoginUser(response);
 
       toast.success(response.message || "Login successful");

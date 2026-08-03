@@ -22,24 +22,32 @@ const ProfileHeroCard = ({
   const fileInputRef = useRef(null);
   const profile = getProfileFromUser(user);
   const initials = getInitials(profile.name);
-  const completionFields = [
-    profile.name,
-    profile.email,
-    profile.phone,
-    profile.gender,
-    profile.dateOfBirth,
-    profile.address,
+  const patientFields = [
+  profile.name,
+  profile.email,
+  profile.phone,
+  profile.gender,
+  profile.dateOfBirth,
+  profile.address,
+];
 
-    doctor?.specialization,
-    doctor?.experience,
-    doctor?.consultationFee,
-    doctor?.qualifications?.length,
-    doctor?.clinicAddress,
-    doctor?.bio,
-  ];
-  const completion = Math.round(
-    (completionFields.filter(Boolean).length / completionFields.length) * 100
-  );
+const doctorFields = [
+  doctor?.specialization,
+  doctor?.experience,
+  doctor?.consultationFee,
+  doctor?.qualifications?.length,
+  doctor?.clinicAddress,
+  doctor?.bio,
+];
+
+const completionFields =
+  user.activeRole === "doctor"
+    ? [...patientFields, ...doctorFields]
+    : patientFields;
+
+const completion = Math.round(
+  (completionFields.filter(Boolean).length / completionFields.length) * 100
+);
 
   const handleAvatarChange = async (e) => {
     const file = e.target.files[0];

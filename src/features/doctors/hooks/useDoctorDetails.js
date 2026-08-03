@@ -2,28 +2,33 @@ import { useEffect, useState } from "react";
 import { useDoctor } from "./useDoctor";
 
 export const useDoctorDetails = (id) => {
+  
   const {
     handleGetDoctorById,
     handleGetAllDoctors,
     doctors,
     selectedDoctor,
     selectedDoctorLoading,
-    handleGetReviewsbyId,
+    
     reviews,
   } = useDoctor();
+
+  
   const [selectedDay, setSelectedDay] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
 
   useEffect(() => {
     handleGetDoctorById(id);
     handleGetAllDoctors();
-    handleGetReviewsbyId(id);
+   
   }, [id]);
+  
 
   const doctor = selectedDoctor;
   const availability = doctor?.availability ?? [];
   const slotList = selectedDay?.slots || [];
   const reviewList = reviews;
+
   const similarDoctors = doctor
     ? doctors
         .filter(

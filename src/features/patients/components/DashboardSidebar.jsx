@@ -1,4 +1,5 @@
 import { CalendarDays, ChevronRight, Clock3, MapPin } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const DashboardSidebar = ({
   profile,
@@ -7,6 +8,9 @@ const DashboardSidebar = ({
   note,
 }) => {
   const NoteIcon = note.icon;
+
+  const navigate = useNavigate();
+  const upcomingAvatarFallback = upcomingAppointment?.avatarFallback || "AM";
 
   return (
     <div className="space-y-5">
@@ -56,9 +60,21 @@ const DashboardSidebar = ({
 
         <button
           type="button"
-          className="mt-4 inline-flex h-10 w-full items-center justify-center gap-2 rounded-full border border-emerald-200 px-4 text-sm font-semibold text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-50"
+          onClick={() =>
+            navigate(
+              profile.profileCompletion === 100
+                ? "/profile/me"
+                : "/profile/edit"
+            )
+          }
+          className={`mt-4 inline-flex h-10 w-full items-center justify-center gap-2 rounded-full border px-4 text-sm font-semibold transition ${profile.profileCompletion === 100
+            ? "border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50"
+            : "border-emerald-200 text-emerald-700 hover:border-emerald-300 hover:bg-emerald-50"
+            }`}
         >
-          Complete profile
+          {profile.profileCompletion === 100
+            ? "View Profile"
+            : "Complete Profile"}
           <ChevronRight className="h-4 w-4" />
         </button>
       </section>
@@ -70,31 +86,45 @@ const DashboardSidebar = ({
               Next appointment
             </p>
             <h2 className="mt-2 text-lg font-semibold tracking-tight text-slate-950">
-              {upcomingAppointment.doctorName}
+              {upcomingAppointment?.doctorName || "No upcoming appointment"}
             </h2>
             <p className="mt-1 text-sm text-slate-600">
-              {upcomingAppointment.specialization}
+              {upcomingAppointment?.specialization || "Book a visit to see it here"}
             </p>
           </div>
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[linear-gradient(135deg,_#0f766e,_#34d399)] text-sm font-semibold text-white">
-            {upcomingAppointment.avatarFallback}
-          </div>
+          {upcomingAppointment?.avatar ? (
+            <img
+              src={upcomingAppointment.avatar}
+              alt={upcomingAppointment.doctorName}
+              className="h-14 w-14 rounded-2xl object-cover"
+            />
+          ) : (
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,_#0f766e,_#34d399)] text-sm font-semibold text-white">
+              {upcomingAvatarFallback}
+            </div>
+          )}
         </div>
 
-        <div className="mt-4 space-y-3 rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
-          <div className="flex items-center gap-3">
-            <CalendarDays className="h-4 w-4 text-emerald-700" />
-            <span>{upcomingAppointment.dateLabel}</span>
+        {upcomingAppointment ? (
+          <div className="mt-4 space-y-3 rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
+            <div className="flex items-center gap-3">
+              <CalendarDays className="h-4 w-4 text-emerald-700" />
+              <span>{upcomingAppointment.dateLabel}</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Clock3 className="h-4 w-4 text-emerald-700" />
+              <span>{upcomingAppointment.timeLabel}</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <MapPin className="h-4 w-4 text-emerald-700" />
+              <span>{upcomingAppointment.hospital}</span>
+            </div>
           </div>
-          <div className="flex items-center gap-3">
-            <Clock3 className="h-4 w-4 text-emerald-700" />
-            <span>{upcomingAppointment.timeLabel}</span>
+        ) : (
+          <div className="mt-4 rounded-2xl bg-slate-50 p-4 text-sm leading-6 text-slate-600">
+            Your next confirmed or pending appointment will appear here.
           </div>
-          <div className="flex items-center gap-3">
-            <MapPin className="h-4 w-4 text-emerald-700" />
-            <span>{upcomingAppointment.hospital}</span>
-          </div>
-        </div>
+        )}
       </section>
 
       <section className="rounded-[20px] border border-emerald-100/70 bg-white p-5 shadow-[0_10px_24px_rgba(15,23,42,0.04)]">
@@ -110,7 +140,11 @@ const DashboardSidebar = ({
         </div>
 
         <div className="mt-4 space-y-4">
-          {activity.map((item) => {
+          {activity.length === 0 ? (
+            <div className="rounded-2xl bg-slate-50 p-4 text-sm leading-6 text-slate-600">
+              No recent appointment activity yet.
+            </div>
+          ) : activity.map((item) => {
             const Icon = item.icon;
 
             return (
@@ -145,6 +179,7 @@ const DashboardSidebar = ({
         <p className="mt-2 text-sm leading-5 text-slate-600">{note.description}</p>
         <button
           type="button"
+          onClick={() => navigate("/profile/doctors")}
           className="mt-4 inline-flex h-10 items-center justify-center rounded-full bg-slate-950 px-4 text-sm font-semibold text-white transition hover:bg-slate-800"
         >
           Explore doctors

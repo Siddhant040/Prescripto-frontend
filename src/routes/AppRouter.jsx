@@ -204,6 +204,10 @@ const router = createBrowserRouter([
             path:"notifications",
             element:<PatientNotification/>,
           },
+          {
+        path: "contact",
+        element: <Contact />,
+      },
 
 
           // LIST PAGE

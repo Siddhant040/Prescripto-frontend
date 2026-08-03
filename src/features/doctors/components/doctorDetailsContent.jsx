@@ -21,6 +21,11 @@ function DoctorDetailsContent({
   reviewList,
   similarDoctors,
 }) {
+  console.log("reviewList", reviewList);
+  const avatar = doctor.user?.avatar;
+
+
+
   return (
     <div className="space-y-6">
       <div className="grid gap-6 xl:grid-cols-[minmax(0,65fr)_minmax(360px,35fr)]">
@@ -28,8 +33,18 @@ function DoctorDetailsContent({
           <div className="grid h-full min-h-0 gap-7 p-6 md:grid-cols-[260px_minmax(0,1fr)] lg:p-8">
             <div className="flex min-h-0 flex-col">
               <div className="flex h-[300px] shrink-0 items-center justify-center rounded-3xl bg-[radial-gradient(circle_at_50%_30%,_#a7f3d0_0%,_#dcfce7_45%,_#f8fafc_100%)]">
-                <div className="flex h-40 w-40 items-center justify-center rounded-full bg-[linear-gradient(135deg,_#047857,_#14b8a6)] text-5xl font-bold text-white shadow-[0_24px_45px_rgba(5,150,105,0.25)] ring-8 ring-white">
-                  {initials}
+                <div className="flex h-40 w-40 items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(135deg,#047857,#14b8a6)] shadow-[0_24px_45px_rgba(5,150,105,0.25)] ring-8 ring-white">
+                  {avatar ? (
+                    <img
+                      src={avatar}
+                      alt={doctor.name}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-5xl font-bold text-white">
+                      {initials}
+                    </span>
+                  )}
                 </div>
               </div>
 
@@ -55,11 +70,10 @@ function DoctorDetailsContent({
                     Verified Doctor
                   </span>
                   <span
-                    className={`rounded-full px-3 py-1.5 text-xs font-semibold ${
-                      doctor.isAvailable
-                        ? "bg-green-50 text-green-700"
-                        : "bg-rose-50 text-rose-600"
-                    }`}
+                    className={`rounded-full px-3 py-1.5 text-xs font-semibold ${doctor.isAvailable
+                      ? "bg-green-50 text-green-700"
+                      : "bg-rose-50 text-rose-600"
+                      }`}
                   >
                     {doctor.isAvailable
                       ? "Available today"
@@ -119,22 +133,20 @@ function DoctorDetailsContent({
                       setSelectedDay(daySchedule);
                       setSelectedSlot(daySchedule.slots[0] || null);
                     }}
-                    className={`rounded-3xl p-4 text-left ring-1 transition duration-300 hover:-translate-y-0.5 hover:shadow-lg ${
-                      selectedDay?._id === daySchedule._id
-                        ? "bg-emerald-600 text-white ring-emerald-600 shadow-[0_14px_28px_rgba(5,150,105,0.2)]"
-                        : "bg-white text-slate-800 ring-emerald-100 hover:bg-emerald-50"
-                    }`}
+                    className={`rounded-3xl p-4 text-left ring-1 transition duration-300 hover:-translate-y-0.5 hover:shadow-lg ${selectedDay?._id === daySchedule._id
+                      ? "bg-emerald-600 text-white ring-emerald-600 shadow-[0_14px_28px_rgba(5,150,105,0.2)]"
+                      : "bg-white text-slate-800 ring-emerald-100 hover:bg-emerald-50"
+                      }`}
                   >
                     <div className="flex items-center justify-between gap-3">
                       <span className="text-base font-semibold">
                         {daySchedule.day}
                       </span>
                       <span
-                        className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                          selectedDay?._id === daySchedule._id
-                            ? "bg-white/15 text-white"
-                            : "bg-emerald-50 text-emerald-700"
-                        }`}
+                        className={`rounded-full px-3 py-1 text-xs font-semibold ${selectedDay?._id === daySchedule._id
+                          ? "bg-white/15 text-white"
+                          : "bg-emerald-50 text-emerald-700"
+                          }`}
                       >
                         {daySchedule.slots.length} Slot(s)
                       </span>
@@ -154,11 +166,10 @@ function DoctorDetailsContent({
                     key={slot._id}
                     type="button"
                     onClick={() => setSelectedSlot(slot)}
-                    className={`rounded-full px-4 py-2 text-sm font-semibold ring-1 transition ${
-                      selectedSlot?._id === slot._id
-                        ? "bg-emerald-600 text-white ring-emerald-600"
-                        : "bg-white text-slate-700 ring-emerald-100 hover:bg-emerald-50"
-                    }`}
+                    className={`rounded-full px-4 py-2 text-sm font-semibold ring-1 transition ${selectedSlot?._id === slot._id
+                      ? "bg-emerald-600 text-white ring-emerald-600"
+                      : "bg-white text-slate-700 ring-emerald-100 hover:bg-emerald-50"
+                      }`}
                   >
                     {slot.start} - {slot.end}
                   </button>
@@ -188,11 +199,11 @@ function DoctorDetailsContent({
 
         <button
           type="button"
-        
+
           className="inline-flex h-12 shrink-0 items-center justify-center rounded-full bg-emerald-600 px-7 text-sm font-semibold text-white shadow-[0_16px_30px_rgba(5,150,105,0.22)] transition hover:bg-emerald-700 hover:shadow-xl"
         >
           <Link to={`booking`}>
-          Book Appointment
+            Book Appointment
           </Link>
         </button>
       </section>
@@ -242,56 +253,78 @@ function DoctorDetailsContent({
         <Panel title="Similar Doctors" className="h-[520px]">
           <div className="h-[calc(520px-4rem)] overflow-y-auto p-6">
             <div className="space-y-4">
-              {similarDoctors.map((similarDoctor) => (
-                <article
-                  key={similarDoctor._id}
-                  className="rounded-3xl bg-white p-5 ring-1 ring-emerald-100 transition duration-300 hover:-translate-y-0.5 hover:shadow-lg"
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-400 text-lg font-bold text-white shadow-md">
-                      {similarDoctor.user.name.charAt(0).toUpperCase()}
-                    </div>
+              {
+                similarDoctors.map((similarDoctor) => {
+                  const avatar2 = similarDoctor.user?.avatar;
 
-                    <div className="min-w-0 flex-1">
-                      <h3 className="truncate font-semibold text-slate-950">
-                        {similarDoctor.user.name}
-                      </h3>
-                      <p className="mt-1 text-sm text-slate-500">
-                        {similarDoctor.specialization}
-                      </p>
+                  const initial = similarDoctor.user?.name
+                    ?.split(" ")
+                    .map((word) => word[0])
+                    .join("")
+                    .slice(0, 2)
+                    .toUpperCase();
 
-                      <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold">
-                        <span className="rounded-full bg-emerald-50 px-3 py-1 text-emerald-700">
-                          {similarDoctor.experience} yrs exp
-                        </span>
-                        <span
-                          className={`rounded-full px-3 py-1 ${
-                            similarDoctor.isAvailable
-                              ? "bg-green-50 text-green-700"
-                              : "bg-red-50 text-red-600"
-                          }`}
-                        >
-                          {similarDoctor.isAvailable
-                            ? "Available"
-                            : "Unavailable"}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
-                    <p className="font-semibold text-emerald-700">
-                      Rs. {similarDoctor.consultationFee}
-                    </p>
-                    <Link
-                      to={similarDoctor.profilePath || `/doctors/${similarDoctor._id}`}
-                      className="inline-flex h-10 items-center justify-center rounded-full bg-emerald-600 px-5 text-sm font-semibold text-white transition hover:bg-emerald-700"
+                  return (
+                    <article
+                      key={similarDoctor._id}
+                      className="rounded-3xl bg-white p-5 ring-1 ring-emerald-100 transition duration-300 hover:-translate-y-0.5 hover:shadow-lg"
                     >
-                      View Profile
-                    </Link>
-                  </div>
-                </article>
-              ))}
+                      <div className="flex items-start gap-4">
+                        <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-400 text-lg font-bold text-white shadow-md">
+                          {avatar2 ? (
+                            <img
+                              src={avatar2}
+                              alt={similarDoctor.user?.name}
+                              className="h-full w-full object-cover"
+                            />
+                          ) : (
+                            <span className="text-sm font-bold text-white">
+                              {initial}
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="min-w-0 flex-1">
+                          <h3 className="truncate font-semibold text-slate-950">
+                            {similarDoctor.user.name}
+                          </h3>
+                          <p className="mt-1 text-sm text-slate-500">
+                            {similarDoctor.specialization}
+                          </p>
+
+                          <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold">
+                            <span className="rounded-full bg-emerald-50 px-3 py-1 text-emerald-700">
+                              {similarDoctor.experience} yrs exp
+                            </span>
+                            <span
+                              className={`rounded-full px-3 py-1 ${similarDoctor.isAvailable
+                                ? "bg-green-50 text-green-700"
+                                : "bg-red-50 text-red-600"
+                                }`}
+                            >
+                              {similarDoctor.isAvailable
+                                ? "Available"
+                                : "Unavailable"}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
+                        <p className="font-semibold text-emerald-700">
+                          Rs. {similarDoctor.consultationFee}
+                        </p>
+                        <Link
+                          to={similarDoctor.profilePath || `/doctors/${similarDoctor._id}`}
+                          className="inline-flex h-10 items-center justify-center rounded-full bg-emerald-600 px-5 text-sm font-semibold text-white transition hover:bg-emerald-700"
+                        >
+                          View Profile
+                        </Link>
+                      </div>
+                    </article>
+                  );
+                })
+              }
             </div>
           </div>
         </Panel>
@@ -348,9 +381,8 @@ const ReviewStars = ({ rating }) => (
     {Array.from({ length: 5 }).map((_, index) => (
       <Star
         key={index}
-        className={`h-4 w-4 ${
-          index < rating ? "fill-current" : "text-slate-200"
-        }`}
+        className={`h-4 w-4 ${index < rating ? "fill-current" : "text-slate-200"
+          }`}
       />
     ))}
   </div>

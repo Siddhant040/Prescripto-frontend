@@ -12,6 +12,7 @@ export const patientAppointments = async({
             limit,
         }
     });
+   
     return response.data;
 }
 export const getAppointmentbyId = async (id)=>{

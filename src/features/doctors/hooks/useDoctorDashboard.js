@@ -29,6 +29,7 @@ export const useDoctorDashboard = () => {
         if (!isMounted) return;
 
         setDoctor(doctorResponse.data ?? null);
+        
         setAppointments(
           appointmentsResponse.data?.appointments ??
             appointmentsResponse.data?.docs ??

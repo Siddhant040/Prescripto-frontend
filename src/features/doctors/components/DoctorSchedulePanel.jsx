@@ -6,11 +6,9 @@ const DoctorSchedulePanel = ({ schedule }) => {
       <p className="text-sm font-semibold uppercase tracking-[0.28em] text-emerald-700">
         Today's Schedule
       </p>
-      <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-950">
-        Patient consultations lined up
-      </h2>
+     
 
-      <div className="mt-6 space-y-4">
+      <div className="mt-3 space-y-3">
         {schedule.map((item) => (
           <article
             key={`${item.patient}-${item.time}`}

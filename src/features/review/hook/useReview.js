@@ -1,4 +1,4 @@
-import {createReview,deleteReview,updateReview,getPatientReview,getDoctorReview} from "../../../api/review.api";
+import {createReview,deleteReview,updateReview,getPatientReview,getDoctorReview,getReviewsByDoctorId} from "../../../api/review.api";
 import { useState } from "react";
 import toast from "react-hot-toast";
 export const useReview = () => {
@@ -19,6 +19,24 @@ const [doctorReviews, setDoctorReviews] = useState({
 });
     const [listLoading, setListLoading] = useState(false);
     const [doctorListLoading, setDoctorListLoading] = useState(false);
+     const[doctorReviewslist, setDoctorReviewslist] = useState([]);
+    const [doctorReviewsLoading, setDoctorReviewsLoading] = useState(false);
+    const handleDoctorReviewsById = async (id) => {
+  setDoctorReviewsLoading(true);
+    try{
+        const response = await getReviewsByDoctorId(id);
+        const reviewsList = response.data
+        console.log("maa ki chut",reviewsList);
+        setDoctorReviewslist(reviewsList);
+        return reviewsList;
+    } catch (error) {
+        console.log(error);
+        toast.error("Unable to fetch reviews");
+    }
+    finally {
+        setDoctorReviewsLoading(false);
+    }
+}
 
     const handleCreateReview = async (reviewData) => {
         try {
@@ -113,5 +131,8 @@ const handleDoctorReview = async () => {
         handleDoctorReview,
         doctorReviews,
         doctorListLoading
+        ,handleDoctorReviewsById,
+        doctorReviewslist,
+        doctorReviewsLoading
     }
 }

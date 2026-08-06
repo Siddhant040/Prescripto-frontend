@@ -1,18 +1,23 @@
 import { useEffect, useState } from "react";
 import { useDoctor } from "./useDoctor";
+import { useReview } from "../../review/hook/useReview";
 
 export const useDoctorDetails = (id) => {
   
   const {
     handleGetDoctorById,
     handleGetAllDoctors,
+ 
     doctors,
     selectedDoctor,
     selectedDoctorLoading,
     
-    reviews,
+    
+  
   } = useDoctor();
-
+  const{handleDoctorReviewsById,
+        doctorReviewslist,
+        doctorReviewsLoading} = useReview();
   
   const [selectedDay, setSelectedDay] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
@@ -20,6 +25,7 @@ export const useDoctorDetails = (id) => {
   useEffect(() => {
     handleGetDoctorById(id);
     handleGetAllDoctors();
+    handleDoctorReviewsById(id);
    
   }, [id]);
   
@@ -27,7 +33,8 @@ export const useDoctorDetails = (id) => {
   const doctor = selectedDoctor;
   const availability = doctor?.availability ?? [];
   const slotList = selectedDay?.slots || [];
-  const reviewList = reviews;
+  const reviewList = doctorReviewslist || [];
+  console.log("reviewListttt",reviewList);
 
   const similarDoctors = doctor
     ? doctors
@@ -43,6 +50,8 @@ export const useDoctorDetails = (id) => {
       ?.split(" ")
       .map((word) => word[0])
       .join("") ?? "";
+      
+     
 
   return {
     doctor,

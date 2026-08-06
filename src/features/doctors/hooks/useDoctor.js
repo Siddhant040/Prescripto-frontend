@@ -7,6 +7,7 @@ import {
        updateDoctorAvailability,
        deleteDoctor, 
        createDoctor,
+       
       updateSlots} from "../../../api/doctor.api";
 import { useState } from "react";
 
@@ -23,6 +24,9 @@ export const useDoctor = () => {
     const [deleting, setDeleting] = useState(false);
     const [creatingDoctor, setCreatingDoctor] = useState(false);
     const [updatingSlots, setUpdatingSlots] = useState(false);
+   
+
+
 
 
 const handleGetAllDoctors = async () => {
@@ -205,7 +209,8 @@ const handleUpdateSlots = async (data) => {
         handleCreateDoctor,
         creatingDoctor,
         handleUpdateSlots,
-        updatingSlots
+        updatingSlots,
+       
 
          
     };

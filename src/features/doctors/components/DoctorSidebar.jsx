@@ -1,69 +1,44 @@
 import {
-  BadgeCheck,
-  CalendarDays,
-  ClipboardList,
   Clock3,
-  FileText,
-  Settings,
-  Star,
-  Users,
+  History,
   LayoutGrid,
-  Stethoscope,
-  User,
-  ChevronRight,
-  LogOut,
-  History
+  Star,
+  Stethoscope
 } from "lucide-react";
-import { Link, useNavigate, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import SidebarSupportCard from "../../../components/layouts/SidebarSupportCard";
-import SwitchProfileCard from "../../../components/layouts/SwitchCard"
-import { useState, useRef } from "react"
-import { useAuth } from "../../../features/auth/hooks/checkAuth";
+import SwitchProfileCard from "../../../components/layouts/SwitchCard";
+
 import { toast } from "react-hot-toast";
+import { useAuth } from "../../../features/auth/hooks/checkAuth";
 
 const navigationItems = [
-  { label: "Dashboard", to: "/doctor-dashboard",end: true ,icon: LayoutGrid },
+  { label: "Dashboard", to: "/doctor-dashboard", end: true, icon: LayoutGrid },
   { label: "Appointments", to: "/doctor-dashboard/appointments", icon: Clock3 },
-  { label: "Patients", to: "/doctor-dashboard/patients", icon: Users },
+
   { label: "Reviews", to: "/doctor-dashboard/reviews", icon: Star },
-  {label: "Payments",to: "/doctor-dashboard/payment", icon: History},
-  
+  { label: "Payments", to: "/doctor-dashboard/payment", icon: History },
+
 
 ];
-const getInitials = (name) => {
-  if (!name) return "AM";
 
-  return name
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase() || "")
-    .join("");
-};
 
-const DoctorSidebar = ({
-  doctorName = "Dr. Sharma",
-  specialization = "Cardiology",
-  status = "Available",
-  quickInfo = [],
-  requests = [],
-}) => {
+const DoctorSidebar = () => {
   const navigate = useNavigate();
- 
+
   const { user, handleChangeActiveRole, isChangingActiveRole } = useAuth();
   const changeActiveRole = async () => {
     try {
       await handleChangeActiveRole("patient");
       toast.success("profile changed successfully");
-       navigate( "/profile");
+      navigate("/profile");
     } catch (error) {
       toast.error(error.response.data.message);
     }
   }
 
-  const profileName = user?.name;
-  const profileEmail = user?.email;
-  const avatarFallback = getInitials(profileName);
+
+
   return (
     <aside className="sticky top-3 flex max-h-[calc(100vh-1.5rem)] min-h-[calc(100vh-1.5rem)] flex-col rounded-[24px] border border-slate-200 bg-white px-4 py-5 shadow-[0_12px_30px_rgba(15,23,42,0.05)]">
       <Link to="/doctor" className="flex items-center gap-3 px-2">
@@ -131,12 +106,12 @@ const DoctorSidebar = ({
       </nav>
       <div className="mt-auto shrink-0 space-y-4">
         <SidebarSupportCard />
-{user?.roles?.includes("patient") && (
-       <SwitchProfileCard
-    switchTo="Patient"
-    onSwitch={changeActiveRole}
-     isLoading={isChangingActiveRole}
-/>
+        {user?.roles?.includes("patient") && (
+          <SwitchProfileCard
+            switchTo="Patient"
+            onSwitch={changeActiveRole}
+            isLoading={isChangingActiveRole}
+          />
         )}
       </div>
 

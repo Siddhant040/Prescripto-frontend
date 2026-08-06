@@ -1,12 +1,10 @@
 import DoctorHero from "../components/DoctorHero";
 import DoctorOverviewCards from "../components/DoctorOverviewCards";
 import DoctorSchedulePanel from "../components/DoctorSchedulePanel";
-import DoctorSidebar from "../components/DoctorSidebar";
 import {
-    doctorOverviewCards,
-    doctorQuickInfo,
-    patientRequests,
-    todaySchedule,
+  doctorOverviewCards,
+
+  todaySchedule,
 } from "../components/dashboardContent";
 import { mapDoctorHero } from "../components/doctorDashboardMapper";
 import { useDoctorDashboard } from "../hooks/useDoctorDashboard";
@@ -23,10 +21,7 @@ const DoctorDashboard = () => {
 
         <div className="grid gap-8 xl:grid-cols-[1.35fr_0.95fr]">
           <DoctorSchedulePanel schedule={todaySchedule} />
-          <DoctorSidebar
-            quickInfo={doctorQuickInfo}
-            requests={patientRequests}
-          />
+
         </div>
       </div>
     </div>

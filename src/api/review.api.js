@@ -27,3 +27,8 @@ export const getDoctorReview = async (id)=>{
     const response = await api.get(`/review/doctor/me`);
     return response.data;
 } 
+export const getReviewsByDoctorId = async (id)=>{
+    const response = await api.get(`/review/doctor/${id}`);
+    console.log("api-response",response.data)
+    return response.data;
+}

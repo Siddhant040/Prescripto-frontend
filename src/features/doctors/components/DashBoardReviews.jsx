@@ -51,7 +51,7 @@ function DashBoardReviews({ reviewList }) {
         <div className="flex gap-4 overflow-x-auto p-6 scrollbar-hide">
           {reviewList.map((review) => (
             <article
-              key={review._id}
+              key={review.id}
               className="min-w-[340px] max-w-[340px] shrink-0 rounded-3xl bg-slate-50/80 p-4 ring-1 ring-slate-100 transition duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-lg"
             >
               <div className="flex items-start gap-4">

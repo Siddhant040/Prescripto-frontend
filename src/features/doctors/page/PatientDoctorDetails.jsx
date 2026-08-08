@@ -1,8 +1,10 @@
 import { useParams } from "react-router-dom";
 import DoctorDetailsContent from "../components/doctorDetailsContent";
 import { useDoctorDetails } from "../hooks/useDoctorDetails";
+import { useNavigate } from "react-router-dom";
 
 function PatientDoctorDetails() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const doctorDetails = useDoctorDetails(id);
   
@@ -32,6 +34,7 @@ function PatientDoctorDetails() {
       slotList={doctorDetails.slotList}
       reviewList={doctorDetails.reviewList}
       similarDoctors={similarDoctors}
+      onBookAppointment={() => navigate("booking")}
     />
   );
 }

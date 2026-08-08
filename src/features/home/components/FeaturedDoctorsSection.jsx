@@ -1,18 +1,29 @@
-import { ArrowRight, Quote, Star, Stethoscope } from "lucide-react";
+import {
+  ArrowRight,
+  Quote,
+  Star,
+  Stethoscope,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 
-const FeaturedDoctorsSection = ({ doctors }) => {
+const FeaturedDoctorsSection = ({ doctors = [] }) => {
+  const featuredDoctors = [...doctors]
+    .sort((a, b) => (b.reviews?.length || 0) - (a.reviews?.length || 0))
+    .slice(0, 3);
+
   return (
-    <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+    <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-2xl">
           <p className="text-sm font-semibold uppercase tracking-[0.3em] text-emerald-700">
             Our Best Doctors
           </p>
+
           <h2 className="mt-4 text-4xl font-semibold tracking-tight text-slate-950">
             Trusted specialists patients love coming back to.
           </h2>
-          <p className="mt-4 text-base leading-7 text-slate-600">
+
+          <p className="mt-5 text-lg leading-8 text-slate-600">
             A featured selection of doctors with strong patient feedback to make
             the homepage feel more trustworthy and human.
           </p>
@@ -28,51 +39,98 @@ const FeaturedDoctorsSection = ({ doctors }) => {
       </div>
 
       <div className="mt-10 grid gap-6 lg:grid-cols-3">
-        {doctors.map((doctor) => (
-          <article
-            key={doctor.id}
-            className="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-[0_18px_48px_rgba(15,23,42,0.08)]"
-          >
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-800">
-                  <Stethoscope className="h-6 w-6" />
+        {featuredDoctors.map((doctor) => {
+          const reviews = doctor.reviews || [];
+
+          const averageRating = reviews.length
+            ? (
+                reviews.reduce(
+                  (sum, review) => sum + Number(review.rating || 0),
+                  0
+                ) / reviews.length
+              ).toFixed(1)
+            : "New";
+
+          const latestReview = reviews.length
+            ? [...reviews].sort(
+                (a, b) =>
+                  new Date(b.createdAt) - new Date(a.createdAt)
+              )[0]
+            : null;
+
+          return (
+            <article
+              key={doctor._id}
+              className="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition hover:-translate-y-1 hover:shadow-xl"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-emerald-50">
+                    {doctor.user?.avatar ? (
+                      <img
+                        src={doctor.user.avatar}
+                        alt={doctor.user.name}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <Stethoscope className="h-6 w-6 text-emerald-800" />
+                    )}
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-semibold tracking-tight text-slate-950">
+                      {doctor.user?.name}
+                    </h3>
+
+                    <p className="text-sm font-medium text-emerald-700">
+                      {doctor.specialization}
+                    </p>
+
+                    <p className="mt-1 text-sm text-slate-500">
+                      {doctor.experience}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-xl font-semibold tracking-tight text-slate-950">
-                    {doctor.name}
-                  </h3>
-                  <p className="text-sm font-medium text-emerald-700">
-                    {doctor.specialty}
-                  </p>
-                  <p className="mt-1 text-sm text-slate-500">
-                    {doctor.experience}
-                  </p>
+
+                <div className="rounded-full bg-amber-50 px-3 py-1 text-sm font-semibold text-amber-700">
+                  {averageRating}
                 </div>
               </div>
 
-              <div className="rounded-full bg-amber-50 px-3 py-1 text-sm font-semibold text-amber-700">
-                {doctor.rating}
+              <div className="mt-6 flex items-center gap-1">
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <Star
+                    key={index}
+                    className={`h-4 w-4 ${
+                      index < Math.round(Number(averageRating) || 0)
+                        ? "fill-amber-400 text-amber-400"
+                        : "text-slate-200"
+                    }`}
+                  />
+                ))}
+
+                <span className="ml-2 text-sm text-slate-500">
+                  ({reviews.length} reviews)
+                </span>
               </div>
-            </div>
 
-            <div className="mt-6 flex items-center gap-1 text-amber-400">
-              {Array.from({ length: 5 }).map((_, index) => (
-                <Star
-                  key={`${doctor.id}-${index}`}
-                  className="h-4 w-4 fill-current"
-                />
-              ))}
-            </div>
+              <div className="mt-6 rounded-[1.5rem] bg-slate-50 p-5">
+                <Quote className="h-5 w-5 text-emerald-700" />
 
-            <div className="mt-6 rounded-[1.5rem] bg-slate-50 p-5">
-              <Quote className="h-5 w-5 text-emerald-700" />
-              <p className="mt-3 text-sm leading-7 text-slate-600">
-                {doctor.review}
-              </p>
-            </div>
-          </article>
-        ))}
+                <p className="mt-3 line-clamp-4 text-sm leading-7 text-slate-600">
+                  {latestReview?.review ||
+                    "Patients appreciate the doctor's professionalism and excellent quality of care."}
+                </p>
+
+                {latestReview?.patient?.name && (
+                  <p className="mt-4 text-sm font-semibold text-slate-900">
+                    — {latestReview.patient.name}
+                  </p>
+                )}
+              </div>
+            </article>
+          );
+        })}
       </div>
     </section>
   );

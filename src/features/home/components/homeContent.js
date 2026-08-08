@@ -21,11 +21,7 @@ export const highlights = [
   },
 ];
 
-export const metrics = [
-  { value: "50+", label: "specialties ready to list" },
-  { value: "10k+", label: "future patients supported" },
-  { value: "24/7", label: "appointment access experience" },
-];
+ 
 
 export const careSteps = [
   "Search doctors by specialty and fit.",

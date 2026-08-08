@@ -1,7 +1,7 @@
 import {
   BadgeCheck,
   CalendarClock,
-  ClipboardCheck,
+  Star,
   DollarSign,
   HeartPulse,
   MessageSquareMore,
@@ -94,12 +94,11 @@ export const mapDoctorHero = (doctor, appointments = []) => {
         icon: HeartPulse,
         label: "Next Visit",
         value: nextAppointment
-          ? `${formatTime(getAppointmentTime(nextAppointment))} ${
-              formatDate(getAppointmentDate(nextAppointment)) ===
-              formatDate(new Date())
-                ? "today"
-                : formatDate(getAppointmentDate(nextAppointment))
-            }`
+          ? `${formatTime(getAppointmentTime(nextAppointment))} ${formatDate(getAppointmentDate(nextAppointment)) ===
+            formatDate(new Date())
+            ? "today"
+            : formatDate(getAppointmentDate(nextAppointment))
+          }`
           : "No visit scheduled",
       },
       {
@@ -122,13 +121,7 @@ export const mapDoctorOverviewCards = (doctor, appointments = [], reviews = []) 
     const date = new Date(getAppointmentDate(item));
     return !Number.isNaN(date.getTime()) && date.toDateString() === todayLabel;
   });
-  const pendingNotes = appointments.filter(
-    (item) =>
-      item?.status === "completed" &&
-      !item?.prescription?.diagnosis &&
-      !item?.prescription?.notes &&
-      !(item?.prescription?.medicines?.length > 0)
-  ).length;
+ 
 
   const weeklyEarnings = appointments
     .filter((item) => item?.paymentStatus === "paid")
@@ -165,10 +158,19 @@ export const mapDoctorOverviewCards = (doctor, appointments = [], reviews = []) 
       icon: CalendarClock,
     },
     {
-      title: "Pending Notes",
-      value: String(pendingNotes).padStart(2, "0"),
-      note: pendingNotes ? "Need summary updates" : "Clinical notes are up to date",
-      icon: ClipboardCheck,
+      title: "Average Rating",
+      value: reviews.length
+        ? (
+          reviews.reduce(
+            (sum, review) => sum + Number(review.rating || 0),
+            0
+          ) / reviews.length
+        ).toFixed(1)
+        : "—",
+      note: reviews.length
+        ? `Based on ${reviews.length} patient reviews`
+        : "No patient reviews yet",
+      icon: Star,
     },
     {
       title: "Estimated Earnings",

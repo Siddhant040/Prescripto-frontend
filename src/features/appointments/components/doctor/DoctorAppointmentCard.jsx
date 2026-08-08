@@ -21,14 +21,24 @@ const DoctorAppointmentCard = ({ appointment }) => {
         </p>
 
         <div className="flex min-w-0 items-start gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,_#0f766e,_#34d399)] text-sm font-semibold text-white">
-            {getInitials(patient.name)}
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-[linear-gradient(135deg,_#0f766e,_#34d399)]">
+            {patient?.avatar ? (
+              <img
+                src={patient.avatar}
+                alt={patient.name}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <span className="text-sm font-semibold text-white">
+                {getInitials(patient.name)}
+              </span>
+            )}
           </div>
           <div className="min-w-0">
             <h3 className="truncate text-lg font-semibold text-slate-950">
               {patient.name || "Patient"}
             </h3>
-            
+
             <p className="mt-1 flex items-center gap-2 text-sm text-slate-500">
               <Phone className="h-4 w-4 text-emerald-700" />
               {patient.phone || "Phone not available"}
@@ -38,9 +48,8 @@ const DoctorAppointmentCard = ({ appointment }) => {
 
         <div className="flex flex-wrap items-center gap-2 lg:justify-end">
           <span
-            className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold capitalize ring-1 ${
-              statusClasses[appointment.status] || statusClasses.pending
-            }`}
+            className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold capitalize ring-1 ${statusClasses[appointment.status] || statusClasses.pending
+              }`}
           >
             {appointment.status}
           </span>
@@ -52,7 +61,7 @@ const DoctorAppointmentCard = ({ appointment }) => {
             View Details
           </Link>
 
-       
+
         </div>
       </div>
     </article>

@@ -2,8 +2,11 @@ import { ChevronRight } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import DoctorDetailsContent from "../components/doctorDetailsContent";
 import { useDoctorDetails } from "../hooks/useDoctorDetails";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 function PublicDoctorDetails() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const doctorDetails = useDoctorDetails(id);
 
@@ -50,6 +53,10 @@ function PublicDoctorDetails() {
           slotList={doctorDetails.slotList}
           reviewList={doctorDetails.reviewList}
           similarDoctors={similarDoctors}
+          onBookAppointment={() => {
+            toast.error("Please log in to continue.");
+            setTimeout(() => navigate("/login"), 1200);
+          }}
         />
       </div>
     </div>

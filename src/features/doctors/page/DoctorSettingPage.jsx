@@ -10,7 +10,7 @@ import UpdateAvailabilityCard from "../components/settings/UpdateAvailabilityCar
 import { useDoctor } from "../hooks/useDoctor";
 
 function DoctorSettingPage() {
-  const [isAvailable, setIsAvailable] = useState(false);
+  
   const navigate = useNavigate();
   const {
     user,
@@ -24,11 +24,7 @@ function DoctorSettingPage() {
     handleGetloggedInDoctor();
   }, []);
 
-  useEffect(() => {
-    if (typeof loggedInDoctor?.isAvailable === "boolean") {
-      setIsAvailable(loggedInDoctor.isAvailable);
-    }
-  }, [loggedInDoctor]);
+ const isAvailable = loggedInDoctor?.isAvailable ?? false;
 
   const ToggleAvailability = () => {
     handletoggleAvailability();

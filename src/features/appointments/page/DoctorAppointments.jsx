@@ -25,6 +25,7 @@ function DoctorAppointments() {
   
   
   const appointments = doctorAppointments;
+  
   const stats = getDoctorAppointmentStats(appointments);
 
 

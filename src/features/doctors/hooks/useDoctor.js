@@ -24,6 +24,7 @@ export const useDoctor = () => {
     const [deleting, setDeleting] = useState(false);
     const [creatingDoctor, setCreatingDoctor] = useState(false);
     const [updatingSlots, setUpdatingSlots] = useState(false);
+    const[totalDoctors, setTotalDoctors] = useState(0);
    
 
 
@@ -33,11 +34,13 @@ const handleGetAllDoctors = async () => {
     try {
         setDoctorLoading(true);
         const response = await getAllDoctors();
-        
+        const total = response.data?.total;
+        setTotalDoctors(total);
+        const responseData = response.data;
         const doctors = response.data?.doctors ?? [];
         setDoctors(doctors);
         
-        return doctors;
+        return responseData;
     } catch (error) {
         console.log(error);
         toast.error("Unable to fetch doctors");
@@ -210,6 +213,7 @@ const handleUpdateSlots = async (data) => {
         creatingDoctor,
         handleUpdateSlots,
         updatingSlots,
+        totalDoctors
        
 
          

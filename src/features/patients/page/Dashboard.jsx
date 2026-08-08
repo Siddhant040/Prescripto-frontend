@@ -30,6 +30,7 @@ const Profile = () => {
       patientProfile.profileCompletion
     );
     const upcomingAppointment = getUpcomingAppointment(appointments);
+    
 
     return {
       heroContent: mapHeroContent(upcomingAppointment, statsSummary),

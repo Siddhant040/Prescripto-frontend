@@ -45,7 +45,9 @@ export const useAppointments = () => {
         setListLoading(true);
         try {
             const response = await patientAppointments({ page, limit });
+            console.log(response);
             setAppointments(response.data?.appointments ?? []);
+
             setPatientPagination({
                 page: response.data.page,
                 limit: response.data.limit,

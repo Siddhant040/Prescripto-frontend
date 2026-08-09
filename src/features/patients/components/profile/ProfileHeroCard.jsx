@@ -18,6 +18,7 @@ const ProfileHeroCard = ({
   label = "Patient profile",
   roleIcon: RoleIcon = UserRound,
   displayNamePrefix = "",
+
 }) => {
   const fileInputRef = useRef(null);
   const profile = getProfileFromUser(user);
@@ -62,6 +63,7 @@ const completion = Math.round(
       toast.error(error.response?.data?.message || "Avatar upload failed");
     }
   };
+
 
   return (
     <section className=" flex h-full flex-col rounded-[20px] border border-emerald-100/80 bg-white p-5 shadow-[0_10px_24px_rgba(15,23,42,0.04)]">

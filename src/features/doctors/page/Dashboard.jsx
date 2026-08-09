@@ -3,75 +3,144 @@ import DoctorOverviewCards from "../components/DoctorOverviewCards";
 import DoctorSchedulePanel from "../components/DoctorSchedulePanel";
 import DashBoardReviews from "../components/DashBoardReviews";
 import AvailabilitySettingsCard from "../components/settings/AvailabilitySettingsCard";
-// import {
-//   doctorOverviewCards,
 
-  
-// } from "../components/dashboardContent";
-import { mapDoctorHero } from "../components/doctorDashboardMapper";
+import {
+  mapDoctorHero,
+  mapTodaySchedule,
+  mapDoctorOverviewCards,
+} from "../components/doctorDashboardMapper";
+
 import { useDoctorDashboard } from "../hooks/useDoctorDashboard";
 import { useReview } from "../../review/hook/useReview";
+import { useDoctor } from "../hooks/useDoctor";
+
 import { useEffect } from "react";
 
-import { useDoctor } from "../hooks/useDoctor";
-import{mapTodaySchedule,mapDoctorOverviewCards} from "../components/doctorDashboardMapper"
-
-
 const DoctorDashboard = () => {
+  const {
+    handleDoctorReviewsById,
+    doctorReviewslist = [],
+    doctorReviewsLoading,
+  } = useReview();
 
-  const { handleDoctorReviewsById, doctorReviewslist, doctorReviewsLoading } = useReview();
-  const { doctor, appointments } = useDoctorDashboard();
-  const { handleGetloggedInDoctor, loggedInDoctor, handletoggleAvailability, updatingAvailability } = useDoctor();
-  console.log("appointments",appointments);
-  const todaySchedule = mapTodaySchedule(appointments);
-  const doctorOverviewCards = mapDoctorOverviewCards(doctor, appointments,doctorReviewslist);
- 
+  const {
+    doctor,
+    appointments = [],
+  } = useDoctorDashboard();
 
- 
+  const {
+    handleGetloggedInDoctor,
+    loggedInDoctor,
+    handletoggleAvailability,
+    updatingAvailability,
+  } = useDoctor();
 
   const id = doctor?._id;
-  const heroContent = mapDoctorHero(doctor, appointments);
-  const reviewsList = doctorReviewslist;
-  console.log("reviewsList",reviewsList);
+
+  // -----------------------------
+  // Dashboard data
+  // -----------------------------
+
+  const todaySchedule = mapTodaySchedule(appointments);
+
+  const doctorOverviewCards = mapDoctorOverviewCards(
+    doctor,
+    appointments,
+    doctorReviewslist
+  );
+
+  const heroContent = mapDoctorHero(
+    doctor,
+    appointments
+  );
+
+  // -----------------------------
+  // Get doctor reviews
+  // -----------------------------
 
   useEffect(() => {
     if (!id) return;
+
     handleDoctorReviewsById(id);
   }, [id]);
+
+  // -----------------------------
+  // Get logged-in doctor
+  // -----------------------------
 
   useEffect(() => {
     handleGetloggedInDoctor();
   }, []);
 
-const isAvailable = loggedInDoctor?.isAvailable ?? false;
- const ToggleAvailability = () => {
+  // -----------------------------
+  // Availability
+  // -----------------------------
+
+  const isAvailable = loggedInDoctor?.isAvailable ?? false;
+
+  const ToggleAvailability = () => {
     handletoggleAvailability();
   };
 
-  if (!doctor) return <div>Loading...</div>;
-  if(!appointments) return <div>Loading...</div>;
-  
-  if (doctorReviewsLoading) return <div>Loading...</div>;
+  // -----------------------------
+  // Initial doctor loading
+  // -----------------------------
 
+  if (!doctor) {
+    return (
+      <div className="flex min-h-[400px] items-center justify-center">
+        <p className="text-sm text-slate-500">
+          Loading doctor dashboard...
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <>
-      <div className="grid gap-5 2xl:grid-cols-[minmax(0,1.65fr)_340px]">
-        <div className="space-y-6">
-          <DoctorHero content={heroContent} />
-          <DoctorOverviewCards cards={doctorOverviewCards} />
-          <AvailabilitySettingsCard
-            isAvailable={isAvailable}
-            onToggle={ToggleAvailability}/>
+    <div className="w-full px-1 py-1">
+      <div className="space-y-6">
+
+        {/* Hero + Overview + Availability + Schedule */}
+        <div className="grid gap-5 2xl:grid-cols-[minmax(0,1.65fr)_340px]">
+
+          {/* Left column */}
+          <div className="min-w-0 space-y-6">
+
+            <DoctorHero
+              content={heroContent}
+            />
+
+            <DoctorOverviewCards
+              cards={doctorOverviewCards}
+            />
+
+            <AvailabilitySettingsCard
+              isAvailable={isAvailable}
+              onToggle={ToggleAvailability}
+              loading={updatingAvailability}
+            />
+
+          </div>
+
+          {/* Right column */}
+          <div className="min-w-0">
+            <DoctorSchedulePanel
+              schedule={todaySchedule}
+            />
+          </div>
+
         </div>
 
-        <DoctorSchedulePanel schedule={todaySchedule} />
-      </div>
+        {/* Patient Reviews */}
+        <div className="mt-6">
+          <DashBoardReviews
+            reviewList={doctorReviewslist}
+            loading={doctorReviewsLoading}
+          />
+        </div>
 
-      <div className="mt-6">
-        <DashBoardReviews reviewList={reviewsList} />
       </div>
-    </>
+    </div>
   );
 };
 

@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -17,6 +17,7 @@ const getRoleRedirectPath = (activeRole) => {
 };
 
 export default function Login() {
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const {
     handleLogin,
@@ -49,7 +50,7 @@ export default function Login() {
         email: data.email,
         password: data.password,
       });
-      
+
       const loggedInUser = getLoginUser(response);
 
       toast.success(response.message || "Login successful");
@@ -131,13 +132,30 @@ export default function Login() {
             <label className="mb-2 block text-sm font-medium text-slate-700">
               Password
             </label>
-            <input
-              type="password"
-              placeholder="Enter your password"
-              autoComplete="current-password"
-              {...register("password")}
-              className="w-full rounded-2xl border border-slate-200 bg-white/80 px-4 py-3.5 text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-slate-900 focus:ring-4 focus:ring-slate-200"
-            />
+
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                autoComplete="current-password"
+                {...register("password")}
+                className="w-full rounded-2xl border border-slate-200 bg-white/80 px-4 py-3.5 pr-12 text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-slate-900 focus:ring-4 focus:ring-slate-200"
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-slate-700"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? (
+                  <EyeOff className="h-5 w-5" />
+                ) : (
+                  <Eye className="h-5 w-5" />
+                )}
+              </button>
+            </div>
+
             <p className="mt-1 min-h-5 text-sm text-rose-500">
               {touchedFields.password ? errors.password?.message || "" : ""}
             </p>

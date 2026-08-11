@@ -9,7 +9,6 @@ import {
   getAppointmentInfoRows,
   getPaymentInfoRows,
   getPeopleInfoRows,
-  paymentDetailFallback,
 } from "../components/details/paymentDetailFallback";
 import { usePayment } from "../hooks/usePayment";
 
@@ -22,7 +21,6 @@ function PaymentDetails() {
 
 
   const payment = paymentDetail;
-  console.log(payment);
 
   useEffect(() => {
     handleGetPaymentById(id);

@@ -1,36 +1,29 @@
-import { useState, useEffect } from "react";
-import { useMemo } from "react";
-import toast from "react-hot-toast";
 import { ArrowLeft } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useDoctor } from "../../doctors/hooks/useDoctor";
 import BookingDoctorCard from "../components/booking/BookingDoctorCard";
 import BookingSlotSection from "../components/booking/BookingSlotSection";
 import BookingSummaryCard from "../components/booking/BookingSummaryCard";
 import SelectedSlotCard from "../components/booking/SelectedSlotCard";
 import {
   generateBookingDates,
-  bookingDoctorFallback,
-  groupSlots,
-  buildAppointmentDateTime,
+  groupSlots
 } from "../components/booking/bookingFallbackData";
-import { useDoctor } from "../../doctors/hooks/useDoctor";
 import { useAppointments } from "../hooks/useAppointment";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 function BookingPage() {
   const location = useLocation();
 
-const { isReschedule, appointmentId } = location.state || {};
+  const { isReschedule, appointmentId } = location.state || {};
   const navigate = useNavigate();
   const { id } = useParams();
-  console.log("id", id);
   const bookingDateOptions = generateBookingDates();
   const [selectedDate, setSelectedDate] = useState(bookingDateOptions[0].value);
   const [selectedSlot, setSelectedSlot] = useState("");
   const { handleGetDoctorById,
     selectedDoctor,
     selectedDoctorLoading } = useDoctor();
-  const { handleGetAvailableSlots, slot, slotLoading,handleCreateAppointment,creating,handleRescheduleAppointment,rescheduling } = useAppointments();
+  const { handleGetAvailableSlots, slot, slotLoading, handleCreateAppointment, creating, handleRescheduleAppointment } = useAppointments();
   const doctor = selectedDoctor;
 
   useEffect(() => {
@@ -43,10 +36,6 @@ const { isReschedule, appointmentId } = location.state || {};
 
     handleGetAvailableSlots(doctorId, selectedDate);
   }, [doctor?._id, selectedDate]);
-  useEffect(() => {
-  setSelectedSlot("");
-}, [selectedDate]);
-
   const groupedSlots = useMemo(() => groupSlots(slot), [slot]);
 
   if (selectedDoctorLoading) {
@@ -60,24 +49,24 @@ const { isReschedule, appointmentId } = location.state || {};
     return <div>Loading...</div>;
   }
 
-  const handleConfirm = async() => {
-   const payload = {
-  doctorId: doctor._id,
-  appointmentDateTime: selectedSlot,
-};
-  if (isReschedule) {
-    await handleRescheduleAppointment(
-      appointmentId,
-      {
-        appointmentDateTime: selectedSlot,
-      }
-    );
+  const handleConfirm = async () => {
+    const payload = {
+      doctorId: doctor._id,
+      appointmentDateTime: selectedSlot,
+    };
+    if (isReschedule) {
+      await handleRescheduleAppointment(
+        appointmentId,
+        {
+          appointmentDateTime: selectedSlot,
+        }
+      );
 
-    navigate(`/profile/appointments/${appointmentId}`);
-  } else {
-    await handleCreateAppointment(payload);
-  }
-};
+      navigate(`/profile/appointments/${appointmentId}`);
+    } else {
+      await handleCreateAppointment(payload);
+    }
+  };
 
   return (
     <div className="w-full px-1 pb-1">
@@ -106,7 +95,10 @@ const { isReschedule, appointmentId } = location.state || {};
             slotGroups={groupedSlots}
             selectedDate={selectedDate}
             selectedSlot={selectedSlot}
-            onSelectDate={setSelectedDate}
+            onSelectDate={(date) => {
+              setSelectedDate(date);
+              setSelectedSlot("");
+            }}
             onSelectSlot={setSelectedSlot}
           />
         </div>
@@ -118,7 +110,7 @@ const { isReschedule, appointmentId } = location.state || {};
           />
           <BookingSummaryCard
             fee={doctor.consultationFee}
-             loading={creating}
+            loading={creating}
             disabled={!selectedDate || !selectedSlot}
             onConfirm={handleConfirm}
           />

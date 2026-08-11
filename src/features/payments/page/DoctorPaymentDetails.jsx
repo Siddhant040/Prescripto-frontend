@@ -6,7 +6,6 @@ import PaymentDetailHero from "../components/details/PaymentDetailHero";
 import PaymentInfoGrid from "../components/details/PaymentInfoGrid";
 import PaymentTimeline from "../components/details/PaymentTimeline";
 import {
-  doctorPaymentDetailFallback,
   getAppointmentInfoRows,
   getPaymentInfoRows,
   getPeopleInfoRows,
@@ -20,7 +19,6 @@ function DoctorPaymentDetails() {
   
   
     const payment = paymentDetail;
-    console.log(payment);
   
     useEffect(() => {
       handleGetPaymentById(id);

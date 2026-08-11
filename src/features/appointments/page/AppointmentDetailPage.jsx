@@ -23,25 +23,23 @@ function AppointmentDetailPage() {
   const { id } = useParams();
   const { user } = useAuth();
   const { handleGetAppointmentbyId, selectedAppointment, appointmentLoading, handleCancelAppointment, canceling } = useAppointments();
-  const { isCreating, handleCreateOrder, handleVerifyPayment, handleGetPaymentById, paymentloading, payments } = usePayment();
+  const { isCreating, handleCreateOrder, handleVerifyPayment } = usePayment();
 
   useEffect(() => {
     handleGetAppointmentbyId(id);
     // handleGetPaymentById(id);
-  }, [id]);
+  }, [id, handleGetAppointmentbyId]);
 
   if (appointmentLoading) {
     return <div>Loading</div>;
   }
 
-  console.log("selectedAppointment", selectedAppointment);
   const appointment = selectedAppointment || appointmentDetailFallback;
   const cancelAppointment = async (id) => {
     try {
       await handleCancelAppointment(id);
       handleGetAppointmentbyId(id);
-    } catch (error) {
-      console.log(error);
+    } catch {
       toast.error("Unable to cancel appointments");
     }
   };
@@ -64,8 +62,6 @@ function AppointmentDetailPage() {
       },
     });
   };
-  console.log("payments", appointment.paymentStatus);
-
   return (
     <div className="w-full px-1 pb-1">
       <Link

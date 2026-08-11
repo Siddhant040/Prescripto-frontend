@@ -42,7 +42,6 @@ const handleGetAllDoctors = async () => {
         
         return responseData;
     } catch (error) {
-        console.log(error);
         toast.error("Unable to fetch doctors");
     }
     finally {
@@ -60,7 +59,6 @@ const handleGetDoctorById = async (id) => {
         // console.log(doctor);
         return doctor;
     } catch (error) {
-        console.log(error);
         toast.error("Unable to fetch doctor");
     }
     finally {
@@ -71,15 +69,11 @@ const handleGetDoctorById = async (id) => {
 const handleGetReviewsbyId = async (id) => {
     try{
         const response = await getReviewsbyId(id);
-        console.log("response",response);
-        console.log("response.data",response.data);
         const reviewsList = response.data.reviews;
-        console.log("reviewsList",reviewsList);
         setReviews(reviewsList);
         return reviewsList;
     }
     catch (error) {
-        console.log(error);
         setReviews([])
         
     }
@@ -87,13 +81,10 @@ const handleGetReviewsbyId = async (id) => {
 const handleGetloggedInDoctor = async () => {
     try {
         const response = await getLoginDoctor();
-        
         const doctor = response.data;
-        console.log("response",doctor);
       
 
         setLoggedInDoctor(doctor);
-        // console.log(doctor);
         return doctor;
     
     }catch (error) {
@@ -147,7 +138,6 @@ const handleDeleteDoctor = async () => {
 
     return response;
   } catch (error) {
-    console.log(error);
     toast.error("Unable to delete doctor");
     throw error;
   }finally {
@@ -163,7 +153,6 @@ const handleCreateDoctor = async (data) => {
   
       return response;
     } catch (error) {
-      console.log(error);
       toast.error("Unable to create doctor");
       throw error;
     }finally {
@@ -179,7 +168,6 @@ const handleUpdateSlots = async (data) => {
   
       return response;
     } catch (error) {
-      console.log(error);
       toast.error("Unable to update slots");
       throw error;
     }finally {

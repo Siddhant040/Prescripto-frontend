@@ -1,147 +1,122 @@
+import { AlertCircle } from "lucide-react";
+import { useEffect } from "react";
+import DashBoardReviews from "../components/DashBoardReviews";
+
 import DoctorHero from "../components/DoctorHero";
 import DoctorOverviewCards from "../components/DoctorOverviewCards";
 import DoctorSchedulePanel from "../components/DoctorSchedulePanel";
-import DashBoardReviews from "../components/DashBoardReviews";
 import AvailabilitySettingsCard from "../components/settings/AvailabilitySettingsCard";
-
 import {
   mapDoctorHero,
-  mapTodaySchedule,
   mapDoctorOverviewCards,
+  
+  mapTodaySchedule,
 } from "../components/doctorDashboardMapper";
-
 import { useDoctorDashboard } from "../hooks/useDoctorDashboard";
-import { useReview } from "../../review/hook/useReview";
 import { useDoctor } from "../hooks/useDoctor";
 
-import { useEffect } from "react";
-
 const DoctorDashboard = () => {
+  const { doctor, appointments, reviews, loading, error } = useDoctorDashboard();
   const {
-    handleDoctorReviewsById,
-    doctorReviewslist = [],
-    doctorReviewsLoading,
-  } = useReview();
-
-  const {
-    doctor,
-    appointments = [],
-  } = useDoctorDashboard();
-
-  const {
-    handleGetloggedInDoctor,
     loggedInDoctor,
+    handleGetloggedInDoctor,
     handletoggleAvailability,
     updatingAvailability,
   } = useDoctor();
-
-  const id = doctor?._id;
-
-  // -----------------------------
-  // Dashboard data
-  // -----------------------------
-
-  const todaySchedule = mapTodaySchedule(appointments);
-
-  const doctorOverviewCards = mapDoctorOverviewCards(
-    doctor,
-    appointments,
-    doctorReviewslist
-  );
-
-  const heroContent = mapDoctorHero(
-    doctor,
-    appointments
-  );
-
-  // -----------------------------
-  // Get doctor reviews
-  // -----------------------------
-
-  useEffect(() => {
-    if (!id) return;
-
-    handleDoctorReviewsById(id);
-  }, [id]);
-
-  // -----------------------------
-  // Get logged-in doctor
-  // -----------------------------
 
   useEffect(() => {
     handleGetloggedInDoctor();
   }, []);
 
-  // -----------------------------
-  // Availability
-  // -----------------------------
+  const activeDoctor = loggedInDoctor || doctor;
+  const heroContent = mapDoctorHero(activeDoctor, appointments);
+  const doctorOverviewCards = mapDoctorOverviewCards(
+    activeDoctor,
+    appointments,
+    reviews
+  );
+  const todaySchedule = mapTodaySchedule(appointments);
 
-  const isAvailable = loggedInDoctor?.isAvailable ?? false;
+  const isAvailable = activeDoctor?.isAvailable ?? false;
 
-  const ToggleAvailability = () => {
-    handletoggleAvailability();
+  const handleAvailabilityToggle = async () => {
+    await handletoggleAvailability({
+      isAvailable: !isAvailable,
+    });
+    await handleGetloggedInDoctor();
   };
 
-  // -----------------------------
-  // Initial doctor loading
-  // -----------------------------
+  if (loading && !activeDoctor) {
+    return <DoctorDashboardLoading />;
+  }
 
-  if (!doctor) {
-    return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <p className="text-sm text-slate-500">
-          Loading doctor dashboard...
-        </p>
-      </div>
-    );
+  if (error) {
+    return <DoctorDashboardError />;
   }
 
   return (
     <div className="w-full px-1 py-1">
       <div className="space-y-6">
-
-        {/* Hero + Overview + Availability + Schedule */}
         <div className="grid gap-5 2xl:grid-cols-[minmax(0,1.65fr)_340px]">
-
-          {/* Left column */}
           <div className="min-w-0 space-y-6">
-
-            <DoctorHero
-              content={heroContent}
-            />
-
-            <DoctorOverviewCards
-              cards={doctorOverviewCards}
-            />
-
+            <DoctorHero content={heroContent} />
+            <DoctorOverviewCards cards={doctorOverviewCards} />
             <AvailabilitySettingsCard
               isAvailable={isAvailable}
-              onToggle={ToggleAvailability}
+              onToggle={handleAvailabilityToggle}
               loading={updatingAvailability}
             />
-
           </div>
 
-          {/* Right column */}
-          <div className="min-w-0">
-            <DoctorSchedulePanel
-              schedule={todaySchedule}
-            />
+          <div className="min-w-0 space-y-6">
+            <DoctorSchedulePanel schedule={todaySchedule} />
+            
           </div>
-
         </div>
 
-        {/* Patient Reviews */}
-        <div className="mt-6">
-          <DashBoardReviews
-            reviewList={doctorReviewslist}
-            loading={doctorReviewsLoading}
-          />
-        </div>
-
+        <DashBoardReviews reviewList={reviews} loading={false} />
       </div>
     </div>
   );
 };
+
+const DoctorDashboardLoading = () => (
+  <div className="w-full px-1 py-1">
+    <div className="space-y-6">
+      <div className="h-72 animate-pulse rounded-[2.25rem] bg-emerald-100/50" />
+      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <div
+            key={index}
+            className="h-36 animate-pulse rounded-[1.75rem] bg-white shadow-[0_18px_48px_rgba(15,23,42,0.08)]"
+          />
+        ))}
+      </div>
+      <div className="grid gap-5 2xl:grid-cols-[minmax(0,1.65fr)_340px]">
+        <div className="h-[680px] animate-pulse rounded-[20px] bg-white" />
+        <div className="space-y-6">
+          <div className="h-[420px] animate-pulse rounded-[20px] bg-white" />
+          <div className="h-[320px] animate-pulse rounded-[20px] bg-white" />
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const DoctorDashboardError = () => (
+  <div className="flex min-h-[420px] items-center justify-center px-4">
+    <section className="w-full max-w-xl rounded-[2rem] border border-rose-100 bg-white p-8 text-center shadow-[0_18px_48px_rgba(15,23,42,0.08)]">
+      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-50 text-rose-600">
+        <AlertCircle className="h-6 w-6" />
+      </div>
+      <h2 className="mt-4 text-2xl font-semibold tracking-tight text-slate-950">
+        Doctor dashboard data could not load
+      </h2>
+      <p className="mt-2 text-sm leading-6 text-slate-600">
+        Please refresh the page or sign in again to continue.
+      </p>
+    </section>
+  </div>
+);
 
 export default DoctorDashboard;

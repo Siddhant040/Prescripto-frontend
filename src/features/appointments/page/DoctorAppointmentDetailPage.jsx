@@ -1,5 +1,6 @@
 import { ArrowLeft } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 import DoctorAppointmentActions from "../components/doctor/DoctorAppointmentActions";
 import DoctorAppointmentInfoCard from "../components/doctor/DoctorAppointmentInfoCard";
 import DoctorPatientInfoCard from "../components/doctor/DoctorPatientInfoCard";
@@ -11,27 +12,24 @@ import { useEffect } from "react";
 function DoctorAppointmentDetailPage() {
 
   const { id } = useParams();
-  const { handleGetAppointmentbyId,selectedAppointment,appointmentLoading,handleUpdateAppointmentStatus,handleCancelAppointment,canceling,updating } = useAppointments();
+  const { handleGetAppointmentbyId,selectedAppointment,appointmentLoading,handleUpdateAppointmentStatus,handleCancelAppointment } = useAppointments();
   const appointment = selectedAppointment
   const status = appointment?.status
   useEffect(()=>{
     handleGetAppointmentbyId(id);
-  },[id])
+  },[id, handleGetAppointmentbyId])
   if(!appointment){
     return <div>Loading</div>
   }
   if(appointmentLoading){
     return <div>Loading</div>
   }
-  console.log("appoitnment",appointment)
-
   const onUpdateStatus = async (id,status) => {
     try{
       await handleUpdateAppointmentStatus(id,status);
       handleGetAppointmentbyId(id);
 
-    }catch(error){
-      console.log(error);
+    }catch{
       toast.error("Unable to update status");
     }
   }
@@ -39,8 +37,7 @@ function DoctorAppointmentDetailPage() {
     try{
       await handleCancelAppointment(id);
       handleGetAppointmentbyId(id);
-    }catch(error){
-      console.log(error);
+    }catch{
       toast.error("Unable to cancel appointments");
     }
   }

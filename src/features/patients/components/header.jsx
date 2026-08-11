@@ -36,7 +36,7 @@ const getGreeting = () => {
   return "Good Evening";
 };
 
-const Header = () => {
+const Header = ({ onMenuClick }) => {
   const { user, handleLogout, isLoggingOut } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -88,6 +88,7 @@ const Header = () => {
         <div className="flex items-center gap-3">
           <button
             type="button"
+            onClick={onMenuClick}
             className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-emerald-100 bg-emerald-50 text-emerald-700 transition hover:border-emerald-200 hover:bg-emerald-100"
             aria-label="Workspace menu"
           >

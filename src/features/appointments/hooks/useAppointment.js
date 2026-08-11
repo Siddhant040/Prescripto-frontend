@@ -45,18 +45,16 @@ export const useAppointments = () => {
         setListLoading(true);
         try {
             const response = await patientAppointments({ page, limit });
-            console.log(response);
             setAppointments(response.data?.appointments ?? []);
 
             setPatientPagination({
                 page: response.data.page,
                 limit: response.data.limit,
                 total: response.data.total,
-            
+
             });
             return response.data?.appointments ?? [];
         } catch (error) {
-            console.log(error);
             toast.error("Unable to fetch appointments");
         } finally {
             setListLoading(false);
@@ -69,7 +67,6 @@ export const useAppointments = () => {
             setSelectedAppointment(response.data ?? null);
             return response.data;
         } catch (error) {
-            console.log(error);
             toast.error("Unable to fetch appointments");
         } finally {
             setAppointmentLoading(false);
@@ -82,7 +79,6 @@ export const useAppointments = () => {
             toast.success("Appointment cancelled successfully");
             return response.data;
         } catch (error) {
-            console.log(error);
             toast.error("Unable to cancel appointments");
         } finally {
             setCanceling(false);
@@ -95,7 +91,6 @@ export const useAppointments = () => {
             setSlot(response.data);
             return response.data;
         } catch (error) {
-            console.log(error);
             toast.error("Unable to get available slots");
         } finally {
             setSlotLoading(false);
@@ -107,9 +102,15 @@ export const useAppointments = () => {
             const response = await createAppointment(data);
             toast.success(response.message);
             return response.data;
-        } catch (error) {
-            console.log(error);
-            toast.error(error.response.message);
+        } 
+            catch (error) {
+                const message =
+                    error.response?.data?.message ||
+                    error.message ||
+                    "Unable to create appointment";
+
+                toast.error(message);
+            
         } finally {
             setCreating(false);
         }
@@ -121,7 +122,6 @@ export const useAppointments = () => {
             const response = await rescheduleAppointment(id, data);
             return response.data;
         } catch (error) {
-            console.log(error);
             toast.error(error.response.data.message);
         } finally {
             setRescheduling(false);
@@ -143,7 +143,6 @@ export const useAppointments = () => {
 
             return response.data?.appointments ?? [];
         } catch (error) {
-            console.log(error);
             toast.error("Unable to fetch appointments");
         } finally {
             setDoctorListLoading(false);
@@ -157,7 +156,6 @@ export const useAppointments = () => {
             toast.success(response.message);
             return response.data;
         } catch (error) {
-            console.log(error);
             toast.error(error.response.message);
         } finally {
             setUpdating(false);
@@ -171,7 +169,6 @@ export const useAppointments = () => {
             toast.success(response.message);
             return response.data;
         } catch (error) {
-            console.log(error);
             toast.error(error.response?.message || "Unable to save prescription");
         } finally {
             setCreatingPrescription(false);

@@ -1,10 +1,9 @@
 import { Star } from "lucide-react";
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 
 const RecommendedDoctors = ({ doctors }) => {
   const navigate = useNavigate();
 
-  console.log("doctors",doctors); 
   return (
     <section>
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
@@ -67,15 +66,14 @@ const RecommendedDoctors = ({ doctors }) => {
               <span>from {doctor.reviewCount} reviews</span>
             </div>
 
-            <div className="mt-4 p-2 flex gap-3">
+            <div className="mt-4 flex gap-3 p-2">
               <button
                 type="button"
-                onClick={()=>navigate(`/profile/doctors/${doctor.id}`)}
-                className="inline-flex  h-10 flex-1 items-center justify-center rounded-full bg-emerald-600 px-4 text-sm font-semibold text-white transition hover:bg-emerald-700"
+                onClick={() => navigate(`/profile/doctors/${doctor.id}`)}
+                className="inline-flex h-10 flex-1 items-center justify-center rounded-full bg-emerald-600 px-4 text-sm font-semibold text-white transition hover:bg-emerald-700"
               >
                 Book appointment
               </button>
-              
             </div>
           </article>
         ))}

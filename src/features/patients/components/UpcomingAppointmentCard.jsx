@@ -11,7 +11,6 @@ const AppointmentMeta = ({ icon: Icon, label }) => (
 );
 
 const UpcomingAppointmentCard = ({ appointment }) => {
-  console.log(appointment);
   const navigate = useNavigate();
   if (!appointment) {
     return (

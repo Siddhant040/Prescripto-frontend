@@ -3,7 +3,6 @@ import { MessageSquare, Star } from "lucide-react";
 import {useReview} from "../hook/useReview"
 import {useParams} from "react-router-dom"
 import toast from "react-hot-toast";
-import {useAppointments} from "../../appointments/hooks/useAppointment"
 
 
 const MAX_LENGTH = 500;
@@ -12,9 +11,7 @@ export const ReviewSection = ({ review,onRefresh }) => {
     
     const { id: appointmentId } = useParams();
     const { handleCreateReview,
-        creatingReview,
         handleUpdateReview,
-        updatingReview,
         handleDeleteReview,
         deletingReview} = useReview();
       
@@ -41,8 +38,7 @@ export const ReviewSection = ({ review,onRefresh }) => {
         toast.success(response.message);
        
        } catch (error) {
-        console.log(error);
-        toast.error(error.response.message);
+        toast.error(error.response?.data?.message || "Unable to create review");
        }
     };
    const UpdateReview = async () => {
@@ -56,7 +52,6 @@ export const ReviewSection = ({ review,onRefresh }) => {
 
         toast.success(response.message);
     } catch (error) {
-        console.log(error);
         toast.error(error.response?.data?.message || "Unable to update review");
     }
 };
@@ -69,7 +64,6 @@ export const ReviewSection = ({ review,onRefresh }) => {
 
         toast.success(response.message);
     } catch (error) {
-        console.log(error);
         toast.error(error.response?.data?.message || "Unable to delete review");
     }
 };

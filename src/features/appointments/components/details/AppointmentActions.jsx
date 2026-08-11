@@ -10,12 +10,6 @@ const AppointmentActions = ({
   isPaid  ,
   isCreating = false,
 }) => {
-
-  console.log({
-  status: appointment.status,
-  paymentStatus: appointment.paymentStatus,
-  isPaid,
-});
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
       {appointment.status === "confirmed" && !isPaid && (

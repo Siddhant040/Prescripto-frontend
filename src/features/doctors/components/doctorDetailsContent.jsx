@@ -22,10 +22,7 @@ function DoctorDetailsContent({
   similarDoctors,
   onBookAppointment,
 }) {
-  console.log("reviewList", reviewList);
   const avatar = doctor.user?.avatar;
-
-
 
   return (
     <div className="space-y-6">

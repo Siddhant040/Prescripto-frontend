@@ -34,7 +34,6 @@ export const useDoctorDetails = (id) => {
   const availability = doctor?.availability ?? [];
   const slotList = selectedDay?.slots || [];
   const reviewList = doctorReviewslist || [];
-  console.log("reviewListttt",reviewList);
 
   const similarDoctors = doctor
     ? doctors

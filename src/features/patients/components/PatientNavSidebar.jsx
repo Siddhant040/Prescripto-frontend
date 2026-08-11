@@ -25,7 +25,7 @@ const navigationItems = [
 
 
 
-const PatientNavSidebar = () => {
+const PatientNavSidebar = ({ isMobileOpen = false, onClose }) => {
   const { user, handleChangeActiveRole, isChangingActiveRole } = useAuth();
 
   const navigate = useNavigate();
@@ -48,7 +48,21 @@ const PatientNavSidebar = () => {
     user?.roles?.length === 1 && user.roles.includes("patient");
 
   return (
-    <aside className="sticky top-3 flex max-h-[calc(100vh-1.5rem)] min-h-[calc(100vh-1.5rem)] flex-col rounded-[24px] border border-slate-200 bg-white px-4 py-5 shadow-[0_12px_30px_rgba(15,23,42,0.05)]">
+    <>
+      {isMobileOpen ? (
+        <button
+          type="button"
+          aria-label="Close sidebar"
+          onClick={onClose}
+          className="fixed inset-0 z-40 bg-slate-950/40 xl:hidden"
+        />
+      ) : null}
+
+      <aside
+        className={`fixed inset-y-3 left-3 z-50 flex w-[calc(100vw-1.5rem)] max-w-[280px] translate-x-[-110%] flex-col rounded-[24px] border border-slate-200 bg-white px-4 py-5 shadow-[0_12px_30px_rgba(15,23,42,0.05)] transition-transform duration-300 xl:sticky xl:top-3 xl:z-auto xl:max-w-none xl:translate-x-0 xl:min-h-[calc(100vh-1.5rem)] xl:w-auto ${
+          isMobileOpen ? "translate-x-0" : ""
+        }`}
+      >
       <Link to="/profile" className="flex items-center gap-3 px-2">
         <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,_#0f766e,_#34d399)] text-white shadow-[0_10px_22px_rgba(15,118,110,0.2)]">
           <Stethoscope className="h-5 w-5" />
@@ -126,7 +140,8 @@ const PatientNavSidebar = () => {
           />
         )}
       </div>
-    </aside>
+      </aside>
+    </>
   );
 };
 

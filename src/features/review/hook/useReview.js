@@ -26,11 +26,9 @@ const [doctorReviews, setDoctorReviews] = useState({
     try{
         const response = await getReviewsByDoctorId(id);
         const reviewsList = response.data
-        console.log("maa ki chut",reviewsList);
         setDoctorReviewslist(reviewsList);
         return reviewsList;
     } catch (error) {
-        console.log(error);
         toast.error("Unable to fetch reviews");
     }
     finally {
@@ -44,7 +42,6 @@ const [doctorReviews, setDoctorReviews] = useState({
         const response = await createReview(reviewData);
         return response;
         }catch (error) {
-            console.log(error);
             toast.error(error.response.message);
         }
          finally {
@@ -57,7 +54,6 @@ const [doctorReviews, setDoctorReviews] = useState({
             const response = await updateReview(id,reviewData);
             return response;
         } catch (error) {
-            console.log(error);
             toast.error(error.response.message);
         }
         finally {
@@ -70,7 +66,6 @@ const [doctorReviews, setDoctorReviews] = useState({
             const response = await deleteReview(id);
             return response;
         } catch (error) {
-            console.log(error);
             toast.error(error.response.message);
         }
         finally {
@@ -91,7 +86,6 @@ const [doctorReviews, setDoctorReviews] = useState({
     setPatientReviews(payload);
     return payload;
   } catch (error) {
-    console.log(error);
     toast.error(error.response?.message || "Unable to fetch reviews");
   } finally {
     setListLoading(false);
@@ -111,7 +105,6 @@ const handleDoctorReview = async () => {
     setDoctorReviews(payload);
     return payload;
   } catch (error) {
-    console.log(error);
     toast.error(error.response?.message || "Unable to fetch reviews");
   } finally {
     setDoctorListLoading(false);

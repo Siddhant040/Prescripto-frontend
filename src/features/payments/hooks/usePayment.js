@@ -60,7 +60,8 @@ export const usePayment = () => {
             setPaymentDetail(response.data);
             return response.data;
         } catch (error) {
-            console.log(error);
+            toast.error(error.response?.data?.message || "Could not load payment");
+            return null;
         } finally {
             setPaymentLoading(false);
         }

@@ -1,87 +1,63 @@
-
 import { loadRazorpay } from "./loadRazorpay";
 
-export const openRazorpayCheckout = async (options)=>{
+export const openRazorpayCheckout = async (options) => {
+  await loadRazorpay();
 
-   await loadRazorpay();
-return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
+    let settled = false;
+    let checkout;
 
-    const razorpayOptions ={
-        ...options,
-        handler : (response) => {
-            resolve({
-                        providerOrderId: response.razorpay_order_id,
-                        providerPaymentId: response.razorpay_payment_id,
-                        providerSignature: response.razorpay_signature,
-                    });
+    const cleanup = () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
+
+    const resolveOnce = (value) => {
+      if (settled) return;
+
+      settled = true;
+      cleanup();
+      resolve(value);
+    };
+
+    const rejectOnce = (error) => {
+      if (settled) return;
+
+      settled = true;
+      cleanup();
+      reject(error);
+    };
+
+    const razorpayOptions = {
+      ...options,
+
+      handler: (response) => {
+        resolveOnce({
+          providerOrderId: response.razorpay_order_id,
+          providerPaymentId: response.razorpay_payment_id,
+          providerSignature: response.razorpay_signature,
+        });
+      },
+
+      modal: {
+        ondismiss: () => {
+          rejectOnce(new Error("Payment cancelled by user"));
         },
-        modal : {
-            ondismiss : () => {
-                reject(new Error("Payment cancelled by user"));
-            }
-        }
-    }
+      },
+    };
 
+    checkout = new window.Razorpay(razorpayOptions);
 
-    const checkout = new window.Razorpay(razorpayOptions);
-checkout.on("payment.failed", (response) => {
-    reject(new Error(response.error.description || "Payment failed"));
-});
-      
-checkout.open();
-})
+    checkout.on("payment.failed", (response) => {
+      const message =
+        response?.error?.description || "Payment failed";
 
+      // Explicitly close Razorpay after failed payment
+      checkout.close();
 
-}
+      rejectOnce(new Error(message));
+    });
 
-
-// const handleOpenCheckout = () => {
-//     const providerOrder = orderData?.providerOrder;
-
-//     if (!providerOrder) {
-//       toast.error("Create a payment order first");
-//       return;
-//     }
-
-//     if (!window.Razorpay) {
-//       toast.error("Razorpay checkout script is not loaded");
-//       return;
-//     }
-
-//     const options = {
-//       key: providerOrder.keyId,
-//       amount: providerOrder.amount,
-//       currency: providerOrder.currency,
-//       name: "Prescripto",
-//       description: "Doctor appointment payment",
-//       order_id: providerOrder.id,
-//       handler: async (razorpayResponse) => {
-//         try {
-//           const response = await verifyPayment({
-//             providerOrderId: razorpayResponse.razorpay_order_id,
-//             providerPaymentId: razorpayResponse.razorpay_payment_id,
-//             providerSignature: razorpayResponse.razorpay_signature
-//           });
-
-//           setVerifyData(response.data);
-//           toast.success(response.message || "Payment verified");
-//           await handleLoadPayments();
-//         } catch (error) {
-//           toast.error(
-//             error.response?.data?.message || "Payment verification failed"
-//           );
-//         }
-//       },
-//       modal: {
-//         ondismiss: () => {
-//           toast("Payment window closed");
-//         }
-//       },
-//       theme: {
-//         color: "#0f766e"
-//       }
-//     };
-
-//     const razorpay = new window.Razorpay(options);
-//     razorpay.open();
-//   };
+    checkout.open();
+  });
+};

@@ -35,6 +35,7 @@ export const getAvailableSlots = async (doctorId, date) => {
 };
 export const createAppointment = async (data) => {
   const response = await api.post("/appointment/", data);
+  
   return response.data;
 }
 export const rescheduleAppointment = async (id, data) => {

@@ -30,18 +30,11 @@ api.interceptors.response.use(
     ) {
       originalRequest._retry = true;
 
-      console.log("Access token expired");
-
       try {
         await refreshAccessToken();
 
-        console.log("Access token refreshed successfully");
-
         return api(originalRequest);
       } catch (refreshError) {
-        console.log("No active session");
-
-        // Reject the ORIGINAL request instead of the refresh error
         return Promise.reject(error);
       }
     }

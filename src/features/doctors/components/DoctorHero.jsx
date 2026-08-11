@@ -16,7 +16,7 @@ const DoctorHero = ({ content }) => {
           </p>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-3 lg:w-100">
+        <div className="grid gap-3 sm:grid-cols-3 lg:w-[25rem]">
           {heroCards.map((item) => {
             const Icon = item.icon;
 

@@ -1,7 +1,5 @@
 import { Bell, ChevronLeft, ChevronRight, CheckCheck } from "lucide-react";
 import NotificationCard from "../component/notificationCard";
-import { fallbackNotifications } from "../component/fallbackdata";
-// const notifications = [...fallbackNotifications];
 import { useNotification } from "../hooks/useNotification";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -27,15 +25,11 @@ const DoctorNotification = () => {
   if (!notifications) {
     return <div>Loading...</div>
   }
-  // console.log(page,limit,total,unread);
-  console.log("notifications", notifications);
-
   const onReadNotification = async (id) => {
     try {
       await handleReadNotification(id);
       handleGetNotifications(currentPage, limit);
     } catch (error) {
-      console.log(error);
     }
   }
   const handleMarkAllAsRead = async () => {
@@ -43,7 +37,6 @@ const DoctorNotification = () => {
       await handleReadAllNotification();
       handleGetNotifications(currentPage, limit);
     } catch (error) {
-      console.log(error);
     }
   }
   const handleDelete = async (id) => {
@@ -51,7 +44,6 @@ const DoctorNotification = () => {
       await handleDeleteNotification(id);
       handleGetNotifications(currentPage, limit);
     } catch (error) {
-      console.log(error);
     }
   }
   const handleNavigate = (notification) => {

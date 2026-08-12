@@ -1,19 +1,19 @@
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 
-import { forgotPasswordSchema } from "../schema/authSchema";
 import { useAuth } from "../hooks/checkAuth";
+import { forgotPasswordSchema } from "../schema/authSchema";
 
 export default function ForgotPassword() {
-  const { handleForgotPassword,isForgotPassword } = useAuth();
+  const { handleForgotPassword, isForgotPassword } = useAuth();
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting, touchedFields },
+    formState: { errors,  touchedFields },
   } = useForm({
     resolver: zodResolver(forgotPasswordSchema),
     mode: "onChange",
@@ -29,17 +29,17 @@ export default function ForgotPassword() {
       toast.success(
         response.message || "Password reset link sent successfully."
       );
-    } catch (error) {
-      console.log(error);
+    } catch  {
+      
       toast.error(
-        error.response?.data?.message ||
-          "Unable to send password reset email."
+        
+        "Unable to send password reset email."
       );
     }
   };
 
-  const onInvalid = (formErrors) => {
-    console.log(formErrors);
+  const onInvalid = () => {
+  
     toast.error("Please fix the highlighted fields before submitting");
   };
 
@@ -86,7 +86,7 @@ export default function ForgotPassword() {
 
           <button
             type="submit"
-            disabled={isForgotPassword  }
+            disabled={isForgotPassword}
             className="flex w-full items-center justify-center rounded-2xl bg-slate-950 px-4 py-3.5 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(15,23,42,0.24)] transition duration-200 hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-70"
           >
             {isForgotPassword ? (

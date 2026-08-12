@@ -71,8 +71,7 @@ const PaymentCard = ({
     payment.speciality || payment.doctor?.specialization || "Consultation";
   const appointmentDate =
     payment.appointmentDate || payment.appointment?.date || "Date";
-  const appointmentTime =
-    payment.appointmentTime || payment.appointment?.time || "Time";
+  
   const paymentMethod = (payment.provider || "Razorpay").toUpperCase();
   const amount = payment.amount || 0;
   const avatar =

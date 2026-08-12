@@ -41,7 +41,7 @@ const handleGetAllDoctors = async () => {
         setDoctors(doctors);
         
         return responseData;
-    } catch (error) {
+    } catch  {
         toast.error("Unable to fetch doctors");
     }
     finally {
@@ -56,9 +56,9 @@ const handleGetDoctorById = async (id) => {
         
         const doctor = response.data;
         setSelectedDoctor(doctor);
-        // console.log(doctor);
+        
         return doctor;
-    } catch (error) {
+    } catch  {
         toast.error("Unable to fetch doctor");
     }
     finally {
@@ -73,7 +73,7 @@ const handleGetReviewsbyId = async (id) => {
         setReviews(reviewsList);
         return reviewsList;
     }
-    catch (error) {
+    catch  {
         setReviews([])
         
     }
@@ -87,8 +87,8 @@ const handleGetloggedInDoctor = async () => {
         setLoggedInDoctor(doctor);
         return doctor;
     
-    }catch (error) {
-        console.log(error);
+    }catch  {
+      
         toast.error("Unable to fetch doctor");
     }
     finally {

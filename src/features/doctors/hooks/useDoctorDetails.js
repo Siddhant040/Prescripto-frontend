@@ -17,7 +17,7 @@ export const useDoctorDetails = (id) => {
   } = useDoctor();
   const{handleDoctorReviewsById,
         doctorReviewslist,
-        doctorReviewsLoading} = useReview();
+        } = useReview();
   
   const [selectedDay, setSelectedDay] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);

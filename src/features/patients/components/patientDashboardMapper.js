@@ -221,7 +221,7 @@ export const getUpcomingAppointment = (appointments) => {
 };
 
 export const mapRecommendedDoctors = (doctors = []) =>
-  console.log("doctors",doctors) ||
+  
   doctors.slice(0, 3).map((doctor) => ({
     id: doctor._id,
     name: doctor.user?.name || "Doctor",

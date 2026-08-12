@@ -1,3 +1,4 @@
+import  api  from "../../../api/axios";
 export const downloadReceipt = async (paymentId) => {
 
     const response = await api.get(

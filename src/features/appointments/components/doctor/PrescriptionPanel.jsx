@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { useAppointments } from "../../hooks/useAppointment";
 import { useParams } from "react-router-dom";
 
+
 const PrescriptionPanel = () => {
   const { id } = useParams();
   const {handleCreatePrescription,creatingPrescription} = useAppointments();
@@ -19,8 +20,8 @@ const PrescriptionPanel = () => {
   const onSubmit = async (data) => {
     try {
       await handleCreatePrescription(id,data);
-    } catch (error) {
-      console.log(error);
+    } catch  {
+     throw new Error("Unable to create prescription");
     }
   };
 

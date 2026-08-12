@@ -1,3 +1,4 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
     BadgeCheck,
     CalendarDays,
@@ -6,12 +7,9 @@ import {
     ShieldCheck,
     UserRound,
 } from "lucide-react";
-import { useAuth } from "../../auth/hooks/checkAuth";
-import { useUpdateProfile } from "../hooks/useUpdateProfile";
-import toast from "react-hot-toast";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "react-hot-toast";
+import { useAuth } from "../../auth/hooks/checkAuth";
 import { changePasswordSchema } from "../../auth/schema/authSchema";
 
 
@@ -98,8 +96,8 @@ const PasswordField = ({
             placeholder={placeholder}
             {...register(name)}
             className={`mt-2 h-11 w-full rounded-2xl border px-4 text-sm outline-none ${error
-                    ? "border-red-500"
-                    : "border-slate-200"
+                ? "border-red-500"
+                : "border-slate-200"
                 }`}
         />
 
@@ -129,7 +127,7 @@ const AccountSettingPage = () => {
         },
     })
 
-    
+
     const { user, handleChangePassword, updatingPassword } = useAuth();
 
     const onSubmit = async (data) => {
@@ -138,7 +136,7 @@ const AccountSettingPage = () => {
             toast.success(response.message || "Password changed successfully")
             reset()
         } catch (error) {
-            console.log(error);
+            
             toast.error(
                 error.response?.data?.message ||
                 "Unable to change password"

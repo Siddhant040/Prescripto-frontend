@@ -1,13 +1,11 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarClock } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import AvailabilityDayCard from "./AvailabilityDayCard";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {availabilitySchema} from "../../schema/UpdateSlots.schema";
 import { useDoctor } from "../../hooks/useDoctor";
-import { AuthContext } from "../../../../shared/context/AuthContext";
-import { useContext } from "react";
+import { availabilitySchema } from "../../schema/UpdateSlots.schema";
+import AvailabilityDayCard from "./AvailabilityDayCard";
 
 const daysOfWeek = [
   "Monday",
@@ -44,13 +42,13 @@ const getSavedSlots = (availability = []) => {
     .filter((item) => item.slots.length > 0);
 };
 
-const UpdateAvailabilityCard = ({ doctor,refreshDoctor }) => {
+const UpdateAvailabilityCard = ({ doctor, refreshDoctor }) => {
   const {
     control,
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
     resolver: zodResolver(availabilitySchema),
     mode: "onChange",
@@ -65,29 +63,29 @@ const UpdateAvailabilityCard = ({ doctor,refreshDoctor }) => {
     });
   }, [doctor, reset]);
 
- 
+
 
   const {
-   handleUpdateSlots,
-  updatingSlots,
-  
+    handleUpdateSlots,
+    updatingSlots,
+
   } = useDoctor();
 
   const onSubmit = async (data) => {
     try {
-    const response = await handleUpdateSlots(data);
-    if(response.success){
-    await refreshDoctor();
-    }
-    toast.success(response?.message || 'Slots updated successfully');
-    
-    
-      
-    } catch (error) {
+      const response = await handleUpdateSlots(data);
+      if (response.success) {
+        await refreshDoctor();
+      }
+      toast.success(response?.message || 'Slots updated successfully');
+
+
+
+    } catch {
       toast.error("Unable to update slots");
-      
+
     }
-  
+
   };
 
   const savedSlots = getSavedSlots(doctor?.availability);

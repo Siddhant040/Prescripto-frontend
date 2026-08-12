@@ -1,30 +1,24 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useState } from "react";
 import DoctorReviewCard from "../component/doctorReviewCard";
-import {fallbackDoctorReviews}from"../component/fallbackData"
-const reviews = fallbackDoctorReviews
 import { useReview } from "../hook/useReview";
-import { useEffect } from "react";
 
-const DoctorReviews = ({
-//   reviews,
-//   total,
-//   page,
-//   totalPages,
-//   onPageChange,
-}) => {
-    
-    
-    const {handleDoctorReview,
-        doctorReviews,
-        doctorListLoading
-      } = useReview();
-      useEffect(() => {
-        handleDoctorReview();
-      }, []);
-      const reviews = doctorReviews?.reviews ?? [];
-      const total = doctorReviews?.total ?? 0;
-      const page = doctorReviews?.page ?? 1;
-      const totalPages = Math.max(1, Math.ceil(total / (doctorReviews?.limit ?? 10)));
+
+const DoctorReviews = () => {
+  const { handleDoctorReview, doctorReviews } = useReview();
+
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    handleDoctorReview(page, 10);
+  }, [page]);
+
+  const reviews = doctorReviews?.reviews ?? [];
+  const total = doctorReviews?.total ?? 0;
+  const totalPages = Math.max(
+    1,
+    Math.ceil(total / (doctorReviews?.limit ?? 10))
+  );
   return (
     <section className="flex h-[700px] flex-col rounded-[20px] border border-emerald-100/70 bg-white p-5 shadow-[0_10px_24px_rgba(15,23,42,0.04)]">
 
@@ -75,7 +69,7 @@ const DoctorReviews = ({
 
           <button
             disabled={page === 1}
-            onClick={() => onPageChange(page - 1)}
+            onClick ={() => setPage((currentPage) => currentPage - 1)}
             className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:opacity-50"
           >
             <ChevronLeft className="h-4 w-4" />
@@ -87,7 +81,7 @@ const DoctorReviews = ({
 
           <button
             disabled={page === totalPages}
-            onClick={() => onPageChange(page + 1)}
+            onClick={() => setPage((currentPage) => currentPage + 1)}
             className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:opacity-50"
           >
             <ChevronRight className="h-4 w-4" />

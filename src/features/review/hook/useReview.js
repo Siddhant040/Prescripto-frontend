@@ -28,7 +28,7 @@ const [doctorReviews, setDoctorReviews] = useState({
         const reviewsList = response.data
         setDoctorReviewslist(reviewsList);
         return reviewsList;
-    } catch (error) {
+    } catch  {
         toast.error("Unable to fetch reviews");
     }
     finally {

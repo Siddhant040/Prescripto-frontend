@@ -41,7 +41,7 @@ function DoctorProfile() {
     return <div>Loading...</div>;
   }
 
-  console.log("billu", doctor);
+  
   const doctorUser =
     typeof loggedInDoctor.user === "object" && loggedInDoctor.user !== null
       ? loggedInDoctor.user

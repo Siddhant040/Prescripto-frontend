@@ -18,9 +18,7 @@ function DoctorPayment() {
     handleLoadPayments(page, limit);
   }, [page, handleLoadPayments]);
 
-  useEffect(() => {
-    setPage(1);
-  }, [search, status, method]);
+  
 
   const filteredPayments = useMemo(() => {
     const normalizedSearch = search.trim().toLowerCase();
@@ -116,11 +114,20 @@ function DoctorPayment() {
         <PaymentStatCards stats={stats} />
         <PaymentFilters
           search={search}
-          onSearch={setSearch}
+          onSearch={(value) => {
+            setSearch(value);
+            setPage(1);
+          }}
           status={status}
-          onStatusChange={setStatus}
+          onStatusChange={(value) => {
+            setStatus(value);
+            setPage(1);
+          }}
           method={method}
-          onMethodChange={setMethod}
+          onMethodChange={(value) => {
+            setMethod(value);
+            setPage(1);
+          }}
         />
         <PaymentTable
           payments={paginatedPayments}

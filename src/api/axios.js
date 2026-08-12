@@ -34,7 +34,7 @@ api.interceptors.response.use(
         await refreshAccessToken();
 
         return api(originalRequest);
-      } catch (refreshError) {
+      } catch (error) {
         return Promise.reject(error);
       }
     }

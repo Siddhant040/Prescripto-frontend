@@ -14,7 +14,7 @@ const DoctorCard = ({
   doctor,
   basePath = "/doctors",
 }) => {
-  console.log("doctor", doctor);
+ 
   const name = doctor.user?.name ?? "Doctor";
   const initials = getInitials(name) || "DR";
   const specialization = doctor.specialization ?? "Specialist";

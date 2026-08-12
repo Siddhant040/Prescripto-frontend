@@ -3,6 +3,7 @@ import NotificationCard from "../component/notificationCard";
 import { useNotification } from "../hooks/useNotification";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 const PatientNotification = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
@@ -14,7 +15,7 @@ const PatientNotification = () => {
         handleReadAllNotification,
       handleDeleteNotification } = useNotification();
   const notifications = notification
-  const { page, limit, total, unread } = notificationPagination
+  const { page, limit, total,  } = notificationPagination
   const totalPages = Math.max(1, Math.ceil(total / (notificationPagination.limit ?? 10)));
   useEffect(() => {
     handleGetNotifications(currentPage, limit);
@@ -29,21 +30,24 @@ const PatientNotification = () => {
     try {
       await handleReadNotification(id);
       handleGetNotifications(currentPage, limit);
-    } catch (error) {
+    } catch  {
+      throw new Error("Unable to read notification");
     }
   }
   const handleMarkAllAsRead = async () => {
     try {
       await handleReadAllNotification();
       handleGetNotifications(currentPage, limit);
-    } catch (error) {
+    } catch  {
+      throw new Error("Unable to read notification");
     }
   }
   const handleDelete = async (id) => {
     try {
       await handleDeleteNotification(id);
       handleGetNotifications(currentPage, limit);
-    } catch (error) {
+    } catch  {
+      throw new Error("Unable to delete notification");
     }
   }
 

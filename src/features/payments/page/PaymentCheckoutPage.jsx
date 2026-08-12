@@ -1,21 +1,20 @@
-import { useEffect, useMemo, useState } from "react";
 import { Clock3, CreditCard, IndianRupee, ReceiptText } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import PaymentFilters from "../components/PaymentFilters";
 import PaymentStatCards from "../components/PaymentStatCards";
 import PaymentTable from "../components/PaymentTable";
 import { usePayment } from "../hooks/usePayment";
-import { useParams } from "react-router-dom";
 
 
 const PatientPaymentPage = () => {
-  
+
 
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("All");
   const [method, setMethod] = useState("All");
   const [page, setPage] = useState(1);
-  const limit= 10
-  ;
+  const limit = 10
+    ;
 
   const {
     payments,
@@ -27,10 +26,7 @@ const PatientPaymentPage = () => {
     handleLoadPayments(page, 10);
   }, [page]);
 
-  useEffect(() => {
-    setPage(1);
-  }, [search, status, method]);
-  console.log(payments);
+  
 
   const filteredPayments = useMemo(() => {
     const normalizedSearch = search.trim().toLowerCase();
@@ -112,12 +108,12 @@ const PatientPaymentPage = () => {
       accent: "bg-amber-50 text-amber-700",
     },
   ];
-  
+
 
   if (isLoadingPayments) {
     return <div>Loading...</div>;
   }
-  
+
 
   return (
     <div className="w-full px-1 pb-1">
@@ -136,11 +132,20 @@ const PatientPaymentPage = () => {
         <PaymentStatCards stats={stats} />
         <PaymentFilters
           search={search}
-          onSearch={setSearch}
+          onSearch={(value) => {
+            setSearch(value);
+            setPage(1);
+          }}
           status={status}
-          onStatusChange={setStatus}
+          onStatusChange={(value) => {
+            setStatus(value);
+            setPage(1);
+          }}
           method={method}
-          onMethodChange={setMethod}
+          onMethodChange={(value) => {
+            setMethod(value);
+            setPage(1);
+          }}
         />
         <PaymentTable
           payments={paginatedPayments}
@@ -149,7 +154,7 @@ const PatientPaymentPage = () => {
           limit={limit}
           total={filteredPayments.length}
           onPageChange={setPage}
-          
+
         />
       </div>
     </div>

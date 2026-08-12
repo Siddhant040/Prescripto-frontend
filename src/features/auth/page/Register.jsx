@@ -29,17 +29,17 @@ function Register() {
       navigate("/login")
 
 
-    } catch (error) {
-      console.log(error)
+    } catch {
+      
       toast.error(
-        error.response?.data?.message ||
+        
         "Registration failed"
       )
     }
   }
 
-  const onInvalid = (formErrors) => {
-    console.log("Register form validation errors:", formErrors)
+  const onInvalid = () => {
+    
     toast.error("Please fix the highlighted fields before submitting")
   }
 

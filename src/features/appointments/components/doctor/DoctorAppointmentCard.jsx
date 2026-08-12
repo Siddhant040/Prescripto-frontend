@@ -1,4 +1,4 @@
-import { Phone, Stethoscope, UserRound } from "lucide-react";
+import { Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { formatAppointmentTime } from "../appointmentUiData";
 import { getInitials } from "./doctorAppointmentUiData";

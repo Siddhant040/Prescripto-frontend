@@ -22,14 +22,14 @@ export default function ResetPassword() {
     const onSubmit = async (data) => {
         try {
             const response = await handleResetPassword(token, data.password);
-            console.log(response);
+            
             toast.success(response.message || "Password reset successfully");
             setTimeout(() => {
                 navigate("/login", { replace: true });
             }, 1500);;
 
         } catch (error) {
-            console.log(error);
+            
             toast.error(
                 error.response?.data?.message ||
                 "Unable to reset password"

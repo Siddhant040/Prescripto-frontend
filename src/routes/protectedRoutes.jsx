@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../features/auth/hooks/checkAuth";
 
-const ProtectedRoutes = ({ children }) => {
+const ProtectedRoutes = () => {
     
     
     const { user , isCheckingAuth } = useAuth();

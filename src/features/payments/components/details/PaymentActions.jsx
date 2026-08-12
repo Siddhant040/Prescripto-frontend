@@ -1,10 +1,10 @@
-import { Download, RefreshCw } from "lucide-react";
+import { Download } from "lucide-react";
 import { usePayment } from "../../hooks/usePayment";
 
 const PaymentActions = ({ payment }) => {
-  const status = String(payment.status || "pending").toLowerCase();
+  
 
-  const { downloadPaymentReceipt, isDownloading } = usePayment();
+  const { downloadPaymentReceipt } = usePayment();
 
   return (
     <section className="rounded-[20px] border border-emerald-100/70 bg-white p-5 shadow-[0_10px_24px_rgba(15,23,42,0.04)]">
@@ -28,7 +28,7 @@ const PaymentActions = ({ payment }) => {
             Download Receipt
           </button>
 
-         
+
         </div>
       </div>
     </section>

@@ -33,8 +33,8 @@ const Home = () => {
         const response = await getStats();
 
         setStats(response.data);
-      } catch (error) {
-        console.log(error);
+      } catch  {
+       ;
       }
     };
 

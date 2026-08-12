@@ -1,11 +1,6 @@
 
 import {
-    LogOut,
-    Mail,
-    Menu,
-    Stethoscope,
-    UserRound,
-    X,
+    Stethoscope
 } from "lucide-react";
 import { Link, NavLink } from "react-router-dom";
 import { navItems } from "../../shared/constants/navigation";

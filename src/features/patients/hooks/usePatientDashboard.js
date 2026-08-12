@@ -25,7 +25,7 @@ export const usePatientDashboard = () => {
         if (!isMounted) return;
 
         const appointmentData = appointmentsResponse.data;
-        console.log("appointmentData", appointmentData);
+       
         const doctorData = doctorsResponse.data;
 
         setAppointments(

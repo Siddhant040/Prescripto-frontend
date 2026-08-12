@@ -24,7 +24,7 @@ function Appointments() {
     handlePatientAppointments(page, 10);
   }, [page]);
 
-  console.log("Appointments", Appointments);
+  
 
   const stats = getAppointmentStats(Appointments);
 

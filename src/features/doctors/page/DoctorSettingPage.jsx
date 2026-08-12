@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/hooks/checkAuth";
@@ -10,7 +10,7 @@ import UpdateAvailabilityCard from "../components/settings/UpdateAvailabilityCar
 import { useDoctor } from "../hooks/useDoctor";
 
 function DoctorSettingPage() {
-  
+
   const navigate = useNavigate();
   const {
     user,
@@ -18,13 +18,13 @@ function DoctorSettingPage() {
     updatingPassword,
     handleChangeActiveRole,
   } = useAuth();
-  const { handleGetloggedInDoctor, loggedInDoctor, handletoggleAvailability, updatingAvailability, handleDeleteDoctor, deleting } = useDoctor();
+  const { handleGetloggedInDoctor, loggedInDoctor, handletoggleAvailability, handleDeleteDoctor, deleting } = useDoctor();
 
   useEffect(() => {
     handleGetloggedInDoctor();
   }, []);
 
- const isAvailable = loggedInDoctor?.isAvailable ?? false;
+  const isAvailable = loggedInDoctor?.isAvailable ?? false;
 
   const ToggleAvailability = () => {
     handletoggleAvailability();
@@ -84,9 +84,9 @@ function DoctorSettingPage() {
 
         <div className="xl:col-span-2">
           <UpdateAvailabilityCard
-           doctor={loggedInDoctor}
-           refreshDoctor={handleGetloggedInDoctor}
-           />
+            doctor={loggedInDoctor}
+            refreshDoctor={handleGetloggedInDoctor}
+          />
         </div>
       </div>
 

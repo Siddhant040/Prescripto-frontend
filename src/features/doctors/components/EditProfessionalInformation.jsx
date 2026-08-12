@@ -13,7 +13,7 @@ function EditProfessionalInformation({
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
     defaultValues: {
       specialization: doctor?.specialization || "",

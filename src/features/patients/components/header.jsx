@@ -76,9 +76,9 @@ const Header = ({ onMenuClick }) => {
     try {
       await handleLogout();
       toast.success("Logged out successfully");
-    } catch (error) {
+    } catch  {
       toast.error("Logout failed");
-      console.log(error);
+      
     }
   };
 

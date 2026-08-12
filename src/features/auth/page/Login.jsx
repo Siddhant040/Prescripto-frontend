@@ -66,8 +66,8 @@ export default function Login() {
     }
   };
 
-  const onInvalid = (formErrors) => {
-    console.log("Login form validation errors:", formErrors);
+  const onInvalid = () => {
+    
     toast.error("Please fix the highlighted fields before submitting");
   };
 
@@ -82,10 +82,10 @@ export default function Login() {
     try {
       const response = await handleResendVerifyEmail(email);
       toast.success(response.message || "Verification email resent.");
-    } catch (error) {
-      console.log(error);
+    } catch  {
+      
       toast.error(
-        error.response?.data?.message || "Unable to resend verification email."
+         "Unable to resend verification email."
       );
     }
   };

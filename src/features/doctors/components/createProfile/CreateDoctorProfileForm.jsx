@@ -23,7 +23,7 @@ const specializations = [
 const CreateDoctorProfileForm = () => {
   const { checkAuth } = useContext(AuthContext);
   const navigate = useNavigate();
-  const { handleCreateDoctor, creatingDoctor } = useDoctor();
+  const { handleCreateDoctor } = useDoctor();
   const {
     register,
     handleSubmit,
@@ -54,9 +54,9 @@ const CreateDoctorProfileForm = () => {
 
       navigate("/doctor-dashboard", { replace: true });
 
-    } catch (error) {
+    } catch {
       toast.error("Unable to create doctor");
-      console.log(error);
+     
     }
   };
 

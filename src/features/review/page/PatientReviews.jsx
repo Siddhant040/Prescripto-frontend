@@ -1,27 +1,22 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ReviewCard from "../component/reviewCard";
-import {fallbackReviews} from"../component/fallbackData"
-// const reviews = fallbackReviews
+
+
 import { useReview } from "../hook/useReview";
-import { useEffect } from "react";
-const PatientReviews = ({
-  // reviews,/
-  // total,
-  // page,
-  // totalPages,
-  // onPageChange,
-}) => {
+import { useEffect, useState } from "react";
+const PatientReviews = () => {
+  const [page, setPage] = useState(1);
 
   const {handlePatientReview,
     patientReviews,
     listLoading
   } = useReview();
   useEffect(() => {
-    handlePatientReview();
-  }, []);
+    handlePatientReview(page, 10);
+  }, [page]);
   const reviews = patientReviews?.reviews ?? [];
 const total = patientReviews?.total ?? 0;
-const page = patientReviews?.page ?? 1;
+
 const totalPages = Math.max(1, Math.ceil(total / (patientReviews?.limit ?? 10)));
   if (listLoading) {
     return <div>Loading...</div>;
@@ -29,8 +24,7 @@ const totalPages = Math.max(1, Math.ceil(total / (patientReviews?.limit ?? 10)))
   if(!patientReviews){
     return <div>Loading...</div>;
   }
-  console.log("patientReviews",patientReviews);
-  console.log("reviews",reviews);
+  
 
 
   return (
@@ -77,7 +71,7 @@ const totalPages = Math.max(1, Math.ceil(total / (patientReviews?.limit ?? 10)))
           <button
             type="button"
             disabled={page === 1}
-            onClick={() => onPageChange(page - 1)}
+            onClick={() => setPage((currentPage) => currentPage - 1)}
             className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <ChevronLeft className="h-4 w-4" />
@@ -93,7 +87,7 @@ const totalPages = Math.max(1, Math.ceil(total / (patientReviews?.limit ?? 10)))
           <button
             type="button"
             disabled={page === totalPages || totalPages === 0}
-            onClick={() => onPageChange(page + 1)}
+           onClick={() => setPage((currentPage) => currentPage + 1)}
             className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <ChevronRight className="h-4 w-4" />

@@ -1,12 +1,11 @@
-import { Link } from "react-router-dom";
-import { navItems } from "../../shared/constants/navigation";
 import { Mail } from "lucide-react";
+import { Link } from "react-router-dom";
 
 
 const footer = () => {
-    return(
-        <>
-         <footer className="border-t border-emerald-100 bg-slate-950 text-slate-200">
+  return (
+    <>
+      <footer className="border-t border-emerald-100 bg-slate-950 text-slate-200">
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.2fr_0.8fr_0.8fr] lg:px-8">
           <div className="max-w-md">
             <p className="text-lg font-semibold tracking-tight text-white">
@@ -60,8 +59,8 @@ const footer = () => {
           </div>
         </div>
       </footer>
-        </>
-    )
+    </>
+  )
 }
 
 export default footer

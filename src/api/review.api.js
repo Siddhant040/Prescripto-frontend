@@ -18,11 +18,11 @@ export const updateReview = async (id,data)=>{
     return response.data;
 }
 
-export const getPatientReview = async (id)=>{
+export const getPatientReview = async ()=>{
     const response = await api.get(`/review/me`);
     return response.data;
 }  
-export const getDoctorReview = async (id)=>{
+export const getDoctorReview = async ()=>{
     const response = await api.get(`/review/doctor/me`);
     return response.data;
 } 

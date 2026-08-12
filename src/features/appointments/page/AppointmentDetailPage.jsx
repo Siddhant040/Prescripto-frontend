@@ -101,10 +101,11 @@ function AppointmentDetailPage() {
 
        
   {appointment.status === "completed" ? (
-    <ReviewSection 
-    review={appointment?.review}
-    onRefresh={()=>handleGetAppointmentbyId(id)}
-      />
+    <ReviewSection
+  key={appointment?.review?.id ?? "new-review"}
+  review={appointment?.review}
+  onRefresh={() => handleGetAppointmentbyId(id)}
+/>
   ) : (
     <AppointmentActions
           appointment={appointment}

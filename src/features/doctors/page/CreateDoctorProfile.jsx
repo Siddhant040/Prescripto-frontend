@@ -1,10 +1,9 @@
-import { useState } from "react";
 import CreateDoctorHero from "../components/createProfile/CreateDoctorHero";
 
 import CreateDoctorProfileForm from "../components/createProfile/CreateDoctorProfileForm";
 
 function CreateDoctorProfile() {
-  
+
 
 
   return (

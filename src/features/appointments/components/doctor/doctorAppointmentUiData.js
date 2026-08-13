@@ -1,6 +1,7 @@
 import {
   CalendarDays,
   Clock3,
+  CreditCard,
   Mail,
   Phone,
   Stethoscope,
@@ -95,6 +96,11 @@ export const getDoctorPatientInfoRows = (appointment) => [
     value: appointment.patient?.email,
     icon: Mail,
   },
+  {
+    label: "Payment Status",
+    value: appointment.paymentStatus,
+    icon: CreditCard,
+  }
 ];
 
 export const getInitials = (name) => {

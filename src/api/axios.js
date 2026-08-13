@@ -1,6 +1,5 @@
-
 import axios from "axios";
-import {refreshAccessToken} from "./auth.api"
+import { refreshAccessToken } from "./auth.api";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -25,7 +24,7 @@ api.interceptors.response.use(
 
     if (
       error.response?.status === 401 &&
-      !originalRequest._retry &&
+      !originalRequest?._retry &&
       !shouldSkip
     ) {
       originalRequest._retry = true;
@@ -34,8 +33,8 @@ api.interceptors.response.use(
         await refreshAccessToken();
 
         return api(originalRequest);
-      } catch (error) {
-        return Promise.reject(error);
+      } catch (refreshError) {
+        return Promise.reject(refreshError);
       }
     }
 

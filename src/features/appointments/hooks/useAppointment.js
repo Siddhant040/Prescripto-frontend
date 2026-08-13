@@ -156,7 +156,7 @@ export const useAppointments = () => {
             toast.success(response.message);
             return response.data;
         } catch (error) {
-            toast.error(error.response.message);
+            toast.error(error.response?.data?.message);
         } finally {
             setUpdating(false);
         }

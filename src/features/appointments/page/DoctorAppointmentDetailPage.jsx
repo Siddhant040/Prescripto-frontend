@@ -14,10 +14,11 @@ function DoctorAppointmentDetailPage() {
   const { id } = useParams();
   const { handleGetAppointmentbyId,selectedAppointment,appointmentLoading,handleUpdateAppointmentStatus,handleCancelAppointment } = useAppointments();
   const appointment = selectedAppointment
+  console.log(appointment);
   const status = appointment?.status
   useEffect(()=>{
     handleGetAppointmentbyId(id);
-  },[id, handleGetAppointmentbyId])
+  },[id,])
   if(!appointment){
     return <div>Loading</div>
   }
@@ -29,8 +30,8 @@ function DoctorAppointmentDetailPage() {
       await handleUpdateAppointmentStatus(id,status);
       handleGetAppointmentbyId(id);
 
-    }catch{
-      toast.error("Unable to update status");
+    }catch(error){
+      toast.error(error.response?.data?.message||"Unable to update status");
     }
   }
     const cancelAppointment = async (id) => {

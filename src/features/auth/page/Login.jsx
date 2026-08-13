@@ -56,7 +56,7 @@ export default function Login() {
       toast.success(response.message || "Login successful");
       navigate(getRoleRedirectPath(loggedInUser?.activeRole), { replace: true });
     } catch (error) {
-      const message = error.response?.data?.message || "Login failed";
+      const message = error.response?.data?.message; ;
 
       toast.error(message);
 

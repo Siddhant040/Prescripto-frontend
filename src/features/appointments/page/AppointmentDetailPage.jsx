@@ -28,7 +28,7 @@ function AppointmentDetailPage() {
   useEffect(() => {
     handleGetAppointmentbyId(id);
     // handleGetPaymentById(id);
-  }, [id, handleGetAppointmentbyId]);
+  }, [id]);
 
   if (appointmentLoading) {
     return <div>Loading</div>;

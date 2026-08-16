@@ -14,7 +14,7 @@ function DoctorAppointmentDetailPage() {
   const { id } = useParams();
   const { handleGetAppointmentbyId,selectedAppointment,appointmentLoading,handleUpdateAppointmentStatus,handleCancelAppointment } = useAppointments();
   const appointment = selectedAppointment
-  console.log(appointment);
+  
   const status = appointment?.status
   useEffect(()=>{
     handleGetAppointmentbyId(id);
